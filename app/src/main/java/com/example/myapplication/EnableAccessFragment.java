@@ -215,49 +215,6 @@ public class EnableAccessFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private long getTimeSpentPerApp(ArrayList<ForegroundSession> foregroundSessions, String appName) {
-        long timeSpent = 0;
-
-        Log.i(TAG, "App: " + appName + " Size of sessions: " + foregroundSessions.size());
-
-        for (ForegroundSession foregroundSession : foregroundSessions) {
-            long timeSpent1 = foregroundSession.timeInForegroundInMilliSeconds();
-//            Log.i(TAG, "App: " + appName + " Time Spent: "+ timeSpent1 + " Info: " + foregroundSession.toString());
-            timeSpent += timeSpent1;
-            Log.i(TAG, "App: " + appName + " Time Spent: "+ TimeUnit.MILLISECONDS.toMinutes(timeSpent) + " Info: " + foregroundSession.toString());
-
-        }
-        return timeSpent;
-    }
-
-    private HashMap<String, ArrayList<ForegroundSession>> organizeUsageEvents(HashMap<String, ArrayList<ForegroundSession>> usageInfoEventsPerApp, UsageEvents.Event currentEvent, String appName) {
-        if (usageInfoEventsPerApp.keySet().contains(appName)) {
-            int numberOfAppSessions = usageInfoEventsPerApp.get(appName).size();
-            ForegroundSession latestForegroundAppSessionInfo = usageInfoEventsPerApp.get(appName).get(numberOfAppSessions - 1);
-
-            if (latestForegroundAppSessionInfo.getBackgroundEvent() != null) {
-
-                ForegroundSession newAppSession = new ForegroundSession();
-                newAppSession.setForegroundEvent(currentEvent);
-                usageInfoEventsPerApp.get(appName).add(newAppSession);
-
-            } else {
-                latestForegroundAppSessionInfo.setBackgroundEvent(currentEvent);
-            }
-
-        } else {
-            ForegroundSession appSession = new ForegroundSession();
-            appSession.setForegroundEvent(currentEvent);
-
-            ArrayList appStream = new ArrayList();
-            appStream.add(appSession);
-
-            usageInfoEventsPerApp.put(appName, appStream);
-        }
-
-        return usageInfoEventsPerApp;
-    }
 
     private class EventInfo {
 
