@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".EnableAccessFragment">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_permissions_2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="54dip">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="32dip"
+                android:layout_marginRight="32dip"
+                android:layout_marginBottom="32dip"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:text="@string/title_enable_usage"
+                android:letterSpacing="0.05"
+                android:textSize="30dip"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dip"
+                    android:text="@string/bullet"
+                    android:textSize="22dip" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dip"
+                    android:layout_marginRight="32dip"
+                    android:layout_marginBottom="22dip"
+                    android:letterSpacing="0.02"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="@string/instruction1_enable_usage"
+                    android:textSize="22dip" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dip"
+                    android:text="@string/bullet"
+                    android:textSize="22dip" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dip"
+                    android:layout_marginRight="32dip"
+                    android:layout_marginBottom="22dip"
+                    android:letterSpacing="0.02"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="@string/instruction2_enable_usage"
+                    android:textSize="22dip" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dip"
+                    android:text="@string/bullet"
+                    android:textSize="22dip" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dip"
+                    android:layout_marginRight="32dip"
+                    android:letterSpacing="0.02"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:layout_marginBottom="22dip"
+                    android:text="@string/instruction3_enable_usage"
+                    android:textSize="22dip" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_weight="1">
+
+            <Button
+                android:id="@+id/enable_usage_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/proxima_nova_regular"
+                android:textSize="13dip"
+                android:paddingHorizontal="81dp"
+                android:paddingVertical="15dp"
+                android:textColor="@color/white"
+                android:text="@string/enable_usage_access"
+                android:letterSpacing="0.15"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:background="@drawable/button_rounded"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

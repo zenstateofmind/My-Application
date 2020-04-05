@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_enable_usage">Here is how to get started: </string>
+    <string name="subtitle_enable_usage">"So, here’s how we can get  started: "</string>
+    <string name="bullet">\u2022 </string>
+    <string name="instruction1_enable_usage">Tap the Button</string>
+    <string name="instruction2_enable_usage">Find blabla in the list and tap on blabl</string>
+    <string name="instruction3_enable_usage">Toggle the button</string>
+    <string name="be_more_mindful">Be more mindful</string>
+    <string name="why_enable">By enabling notifications, we will remind you on a periodic basis of your phone usage patterns.</string>
+    <string name="font_name">APP NAME</string>
+    <string name="notify_example">"Yesterday, you were on your phone for 30 mins less than the day before! Great Job! "</string>
+    <string name="enable_usage_access">ENABLE USAGE ACCESS</string>
+    <string name="enable_notifications">ENABLE NOTIFICATIONS</string>
+    <string name="ill_do_it_later">I\'LL DO IT LATER</string>
+</resources>
