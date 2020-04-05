@@ -109,7 +109,6 @@ public class EnableAccessFragment extends Fragment {
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
 
-//        getTimeWithUsageStats(cal, usageStatsManager);
 
         getTimeWithUsageEvents(cal, usageStatsManager);
 
@@ -325,69 +324,6 @@ public class EnableAccessFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private HashMap<String, Integer> iterateNumberOfOpensPerApp(HashMap<String, Integer> numberOfOpens,
-                                                                UsageEvents.Event currentEvent,
-                                                                String appName) {
-
-        if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
-
-            if (numberOfOpens.containsKey(appName)) {
-                Integer value = new Integer(numberOfOpens.get(appName));
-                value = value + 1;
-                numberOfOpens.put(appName, value);
-            } else {
-                numberOfOpens.put(appName, 1);
-            }
-
-        }
-
-        return numberOfOpens;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void getTimeWithUsageStats(Calendar cal, UsageStatsManager usageStatsManager) {
-
-        PackageManager packageManager = getActivity().getPackageManager();
-
-
-        List<UsageStats> usageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY
-                , 1585742400000L, 1585803600000L);
-
-        Map<String, UsageStats> appToUsageMap = usageStatsManager.queryAndAggregateUsageStats(1585724400000L, 1585803600000L);
-
-        for (String appName : appToUsageMap.keySet()) {
-            UsageStats appUsageStats = appToUsageMap.get(appName);
-
-            try {
-                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(appUsageStats.getPackageName(), 0);
-                String tempAppName = applicationInfo.loadLabel(packageManager).toString();
-
-                long timeSpentOnAppInMillis = appUsageStats.getTotalTimeInForeground();
-                Log.i(TAG, "Name of the app: " + tempAppName +
-                        " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentOnAppInMillis) +
-                        " Start date: " + appUsageStats.getFirstTimeStamp() +
-                        " End date: " + appUsageStats.getLastTimeStamp());
-
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, "Failed to get stats of the app " + appUsageStats.getPackageName());
-            }
-        }
-
-        for (UsageStats usageStatsFromList: usageStats) {
-
-            try {
-                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(usageStatsFromList.getPackageName(), 0);
-                String appName = applicationInfo.loadLabel(packageManager).toString();
-
-                long timeSpentOnAppInMillis = usageStatsFromList.getTotalTimeInForeground();
-
-            } catch (PackageManager.NameNotFoundException e) {
-                Log.e(TAG, "Failed to get stats of the app " + usageStatsFromList.getPackageName());
-            }
-
-        }
-    }
 
     private String dateAndTime(Long timestamp) {
         Date date = new Date(timestamp);
