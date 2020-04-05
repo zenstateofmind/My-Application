@@ -44,7 +44,6 @@ public class EnableAccessFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +62,9 @@ public class EnableAccessFragment extends Fragment {
         return fragmentEnableAccessView;
     }
 
+    /**
+     * TODO: After getting access to usage data, make sure that you come back straight into the app.
+     */
     private void initializeComponents(View fragmentEnableAccessView) {
 
         // Initialize the components
@@ -76,7 +78,7 @@ public class EnableAccessFragment extends Fragment {
                     startActivity(intent);
                 } else {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        printAppUsage();
+//                        printAppUsage();
 
                     }
                 }
