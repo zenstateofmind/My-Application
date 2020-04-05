@@ -96,50 +96,32 @@ public class EnableAccessFragment extends Fragment {
     private void printAppUsage() {
         Log.i(TAG, "Usage access success!");
 
-        // set up usage stats manager
-
-        // today
-        Calendar cal = new GregorianCalendar();
-        // reset hour, minutes, seconds and millis
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-
         UsageStatsManager usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-
-
-        getTimeWithUsageEvents(cal, usageStatsManager);
+        getTimeWithUsageEvents(usageStatsManager);
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void getTimeWithUsageEvents(Calendar cal, UsageStatsManager usageStatsManager) {
+    private void getTimeWithUsageEvents(UsageStatsManager usageStatsManager) {
 
-//        UsageEvents usageEvents = usageStatsManager.queryEvents(cal.getTimeInMillis(), System.currentTimeMillis());
-        UsageEvents usageEvents = usageStatsManager.queryEvents(1585638000000L, 1585724399000L);
+        // get the set of installed packages
         PackageManager packageManager = getActivity().getPackageManager();
-
-//        List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(PackageManager.GET_META_DATA);
-        final PackageManager pm = getActivity().getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> installedApplications = packageManager.queryIntentActivities(intent, PackageManager.GET_META_DATA);
 
         ArrayList<String> appsOnDevice = new ArrayList<>();
 
-        List<ResolveInfo> installedApplications = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA);
-
+        // Convert the list of resolved info into app name string list
         for (ResolveInfo appInfo: installedApplications) {
             appsOnDevice.add(appInfo.loadLabel(packageManager).toString());
-//            Log.i(TAG, "Installed app: " + appInfo.loadLabel(packageManager).toString());
         }
-
-        HashMap<String, Integer> numberOfOpens = new HashMap<>();
 
         HashMap<String, ArrayList<UsageEvents.Event>> usageInfoEventsPerApp = new HashMap<String, ArrayList<UsageEvents.Event>>();
 
-        ArrayList<EventInfo> allUsageEventsTemp = new ArrayList<>();
+        // queryEvents takes start time and end time in milli seconds
+        UsageEvents usageEvents = usageStatsManager.queryEvents(1585638000000L, 1585724399000L);
+
 
         while (usageEvents.hasNextEvent()) {
             UsageEvents.Event currentEvent = new UsageEvents.Event();
@@ -152,13 +134,11 @@ public class EnableAccessFragment extends Fragment {
                     ApplicationInfo applicationInfo = packageManager.getApplicationInfo(currentEvent.getPackageName(), 0);
                     String appName = applicationInfo.loadLabel(packageManager).toString();
 
-//                    numberOfOpens = iterateNumberOfOpensPerApp(numberOfOpens, currentEvent, appName);
-//                    usageInfoEventsPerApp = organizeUsageEvents(usageInfoEventsPerApp, currentEvent, appName);
-
                     Log.i(TAG, "App Name: " + appName +
                             " Event type: " + currentEvent.getEventType() +
                             " Time: " + dateAndTime(currentEvent.getTimeStamp()));
 
+                    // If the usage event belongs to an installed app, add it to our map of <app -> events>
                     if (appsOnDevice.contains(appName)) {
                         ArrayList<UsageEvents.Event> appRelatedEvents = new ArrayList<>();
                         if (usageInfoEventsPerApp.keySet().contains(appName)) {
@@ -166,9 +146,6 @@ public class EnableAccessFragment extends Fragment {
                         }
                         appRelatedEvents.add(currentEvent);
                         usageInfoEventsPerApp.put(appName, appRelatedEvents);
-
-
-                        allUsageEventsTemp.add(new EventInfo(currentEvent, appName));
                     }
 
                 } catch (PackageManager.NameNotFoundException e) {
@@ -176,17 +153,25 @@ public class EnableAccessFragment extends Fragment {
                 }
 
             }
-
         }
 
 
         HashMap<String, Long> timeSpentPerApp = new HashMap<>();
 
         for (String app : usageInfoEventsPerApp.keySet()) {
+
             long timeSpent = 0;
+            int i = 0;
             ArrayList<UsageEvents.Event> appEvents = usageInfoEventsPerApp.get(app);
 
-            int i = 0;
+            // Get two events at once - ideally know thats a foreground task and one thats a
+            // background task. However, due to complications, this is not the case all the time,
+            // so we *check* if the first task is foreground task and the second task is the
+            // background task. If not, there might be some weird stuff happening with the way
+            // usage events have been saved. In that case, we increment by 1 and examine the same thing.
+            // If it's not the case, we take a time diff of background - foreground, add that
+            // to the time spent on the app and then increment by 2.
+
             while (i < appEvents.size() - 1) {
                 UsageEvents.Event firstEvent = appEvents.get(i);
                 UsageEvents.Event secondEvent = appEvents.get(i + 1);
@@ -212,75 +197,7 @@ public class EnableAccessFragment extends Fragment {
             Log.i(TAG, "App name: " + appName + " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentPerApp.get(appName)));
         }
 
-
     }
-
-
-    private class EventInfo {
-
-        private UsageEvents.Event event;
-        private String appName;
-
-        public EventInfo(UsageEvents.Event event, String appName){
-            this.event = event;
-            this.appName = appName;
-        }
-
-        public UsageEvents.Event getEvent() {
-            return event;
-        }
-
-        public String getAppName() {
-            return appName;
-        }
-    }
-
-    private class ForegroundSession {
-        private UsageEvents.Event foregroundEvent;
-        private UsageEvents.Event backgroundEvent;
-
-        public ForegroundSession() {
-            foregroundEvent = null;
-            backgroundEvent = null;
-        }
-
-        public void setBackgroundEvent(UsageEvents.Event backgroundEvent) {
-            this.backgroundEvent = backgroundEvent;
-        }
-
-        public void setForegroundEvent(UsageEvents.Event foregroundEvent) {
-            this.foregroundEvent = foregroundEvent;
-        }
-
-        public UsageEvents.Event getBackgroundEvent() {
-            return backgroundEvent;
-        }
-
-        public UsageEvents.Event getForegroundEvent() {
-            return foregroundEvent;
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        public long timeInForegroundInMilliSeconds() {
-            if (foregroundEvent == null || backgroundEvent == null) {
-                return 0;
-            } else {
-                return backgroundEvent.getTimeStamp() - foregroundEvent.getTimeStamp();
-            }
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        public String toString() {
-            if (foregroundEvent != null && backgroundEvent != null) {
-                return "Start Time: " + dateAndTime(foregroundEvent.getTimeStamp()) + " End Time: " +
-                        dateAndTime(backgroundEvent.getTimeStamp());
-            }
-            return "";
-        }
-
-
-    }
-
 
     private String dateAndTime(Long timestamp) {
         Date date = new Date(timestamp);
