@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.app.AppOpsManager;
 import android.app.usage.UsageEvents;
-import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
@@ -24,16 +23,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -97,31 +90,21 @@ public class EnableAccessFragment extends Fragment {
         Log.i(TAG, "Usage access success!");
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-        getTimeWithUsageEvents(usageStatsManager);
+        HashMap<String, Long> timeSpentPerApp = getTimeWithUsageEvents(usageStatsManager);
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void getTimeWithUsageEvents(UsageStatsManager usageStatsManager) {
+    private HashMap<String, Long> getTimeWithUsageEvents(UsageStatsManager usageStatsManager) {
 
-        // get the set of installed packages
+
         PackageManager packageManager = getActivity().getPackageManager();
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        List<ResolveInfo> installedApplications = packageManager.queryIntentActivities(intent, PackageManager.GET_META_DATA);
-
-        ArrayList<String> appsOnDevice = new ArrayList<>();
-
-        // Convert the list of resolved info into app name string list
-        for (ResolveInfo appInfo: installedApplications) {
-            appsOnDevice.add(appInfo.loadLabel(packageManager).toString());
-        }
-
+        ArrayList<String> appsOnDevice = getInstalledApps(packageManager);
         HashMap<String, ArrayList<UsageEvents.Event>> usageInfoEventsPerApp = new HashMap<String, ArrayList<UsageEvents.Event>>();
+        HashMap<String, Long> timeSpentPerApp = new HashMap<>();
 
         // queryEvents takes start time and end time in milli seconds
-        UsageEvents usageEvents = usageStatsManager.queryEvents(1585638000000L, 1585724399000L);
-
+        UsageEvents usageEvents = usageStatsManager.queryEvents(1585983600000L, 1586069999000L);
 
         while (usageEvents.hasNextEvent()) {
             UsageEvents.Event currentEvent = new UsageEvents.Event();
@@ -155,6 +138,17 @@ public class EnableAccessFragment extends Fragment {
             }
         }
 
+        timeSpentPerApp = getTimeSpentPerApp(usageInfoEventsPerApp);
+
+        for (String appName : timeSpentPerApp.keySet()) {
+            Log.i(TAG, "App name: " + appName + " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentPerApp.get(appName)));
+        }
+
+        return timeSpentPerApp;
+
+    }
+
+    private HashMap<String, Long> getTimeSpentPerApp(HashMap<String, ArrayList<UsageEvents.Event>> usageInfoEventsPerApp) {
 
         HashMap<String, Long> timeSpentPerApp = new HashMap<>();
 
@@ -193,10 +187,22 @@ public class EnableAccessFragment extends Fragment {
             timeSpentPerApp.put(app, timeSpent);
         }
 
-        for (String appName : timeSpentPerApp.keySet()) {
-            Log.i(TAG, "App name: " + appName + " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentPerApp.get(appName)));
-        }
+        return timeSpentPerApp;
 
+    }
+
+    private ArrayList<String> getInstalledApps(PackageManager packageManager) {
+        Intent intent = new Intent(Intent.ACTION_MAIN, null);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        List<ResolveInfo> installedApplications = packageManager.queryIntentActivities(intent, PackageManager.GET_META_DATA);
+
+        ArrayList<String> appsOnDevice = new ArrayList<>();
+
+        // Convert the list of resolved info into app name string list
+        for (ResolveInfo appInfo: installedApplications) {
+            appsOnDevice.add(appInfo.loadLabel(packageManager).toString());
+        }
+        return appsOnDevice;
     }
 
     private String dateAndTime(Long timestamp) {
