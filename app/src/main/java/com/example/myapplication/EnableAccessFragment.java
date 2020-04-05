@@ -180,70 +180,6 @@ public class EnableAccessFragment extends Fragment {
 
         }
 
-        // remove the events where launcher comes in and then goes back to the old app
-
-//        ArrayList<EventInfo> allUsageEvents = new ArrayList<>();
-//
-//        for (int i = 0; i < allUsageEventsTemp.size(); i++) {
-////            if (allUsageEvents.get(allUsageEvents.size() - 1).getEvent().getEventType() != allUsageEventsTemp.get(i).getEvent().getEventType()) {
-////                allUsageEvents.add(allUsageEventsTemp.get(i));
-////            }
-//
-//            Log.i(TAG, "App Name: " + allUsageEventsTemp.get(i).getAppName() +
-//                    " Event type: " + allUsageEventsTemp.get(i).getEvent().getEventType() +
-//                    " Time: " + dateAndTime(allUsageEventsTemp.get(i).getEvent().getTimeStamp()));
-//
-//            allUsageEvents.add(allUsageEventsTemp.get(i));
-//
-//            if (i+2 < allUsageEventsTemp.size() &&
-//                    allUsageEventsTemp.get(i).getEvent().getEventType() == allUsageEventsTemp.get(i+1).getEvent().getEventType() &&
-//                    allUsageEventsTemp.get(i).getEvent().getEventType() != allUsageEventsTemp.get(i+2).getEvent().getEventType()) {
-//
-//                Log.i(TAG, "App Name of i+1: " + allUsageEventsTemp.get(i+1).getAppName() +
-//                        " Event type: " + allUsageEventsTemp.get(i+1).getEvent().getEventType() +
-//                        " Time: " + dateAndTime(allUsageEventsTemp.get(i+1).getEvent().getTimeStamp()));
-//
-//                Log.i(TAG, "App Name of i+2: " + allUsageEventsTemp.get(i+2).getAppName() +
-//                        " Event type: " + allUsageEventsTemp.get(i+2).getEvent().getEventType() +
-//                        " Time: " + dateAndTime(allUsageEventsTemp.get(i+2).getEvent().getTimeStamp()));
-//
-//                Log.i(TAG, "Skipped i+1: " + allUsageEventsTemp.get(i+1).getAppName());
-//                Log.i(TAG, "_______________________________________________________");
-//
-//                i++;
-//            }
-//
-//        }
-
-//        Log.i(TAG, "Start aggregating data");
-
-        // get the time spent from the usage events
-//        HashMap<String, Long> timeSpentPerApp = new HashMap<>();
-
-//        for (int i = 0; i < allUsageEvents.size() - 1; i++) {
-//            EventInfo firstEvent = allUsageEvents.get(i);
-//            EventInfo secondEvent = allUsageEvents.get(i + 1);
-//
-//
-//            if (firstEvent.getAppName().equalsIgnoreCase(secondEvent.getAppName())
-//                    && firstEvent.getEvent().getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND
-//                    && secondEvent.getEvent().getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
-//
-//                long timeSpent = 0;
-//                if (timeSpentPerApp.keySet().contains(firstEvent.getAppName())) {
-//                     timeSpent = timeSpentPerApp.get(firstEvent.getAppName()) +
-//                             (secondEvent.getEvent().getTimeStamp() - firstEvent.getEvent().getTimeStamp());
-//                } else {
-//                     timeSpent = secondEvent.getEvent().getTimeStamp() - firstEvent.getEvent().getTimeStamp();
-//                }
-//
-////                Log.i(TAG, "App Name: " + firstEvent.getAppName() + " Calculated time spent: "  + timeSpent);
-//
-//                timeSpentPerApp.put(firstEvent.getAppName(), timeSpent);
-//
-//            }
-//
-//        }
 
         HashMap<String, Long> timeSpentPerApp = new HashMap<>();
 
@@ -277,15 +213,6 @@ public class EnableAccessFragment extends Fragment {
             Log.i(TAG, "App name: " + appName + " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentPerApp.get(appName)));
         }
 
-
-//        for (String app : usageInfoEventsPerApp.keySet()) {
-//            long timeSpentPerAppInMilli = getTimeSpentPerApp(usageInfoEventsPerApp.get(app), app);
-//            Log.i(TAG, "App: " + app + " Time Spent Per App: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentPerAppInMilli));
-//        }
-
-//        for (String app : numberOfOpens.keySet()) {
-//            Log.i(TAG, "App: " + app + " Number of Times Opened: " + numberOfOpens.get(app));
-//        }
 
     }
 
@@ -423,10 +350,6 @@ public class EnableAccessFragment extends Fragment {
 
         PackageManager packageManager = getActivity().getPackageManager();
 
-//        Log.i(TAG, "Start date for analysis: " + dateAndTime(cal.getTimeInMillis()));
-//        Log.i(TAG, "End date for analysis: " + dateAndTime(System.currentTimeMillis()));
-
-
 
         List<UsageStats> usageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY
                 , 1585742400000L, 1585803600000L);
@@ -458,24 +381,6 @@ public class EnableAccessFragment extends Fragment {
                 String appName = applicationInfo.loadLabel(packageManager).toString();
 
                 long timeSpentOnAppInMillis = usageStatsFromList.getTotalTimeInForeground();
-//                Log.i(TAG, "Name of the app: " + appName +
-//                        " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentOnAppInMillis) +
-//                        " Start date: " + usageStatsFromList.getFirstTimeStamp() +
-//                        " End date: " + usageStatsFromList.getLastTimeStamp());
-
-//                int timeSpentInMins = (int) ((timeSpentOnAppInMillis / (1000*60)) % 60);
-//
-//                Timestamp firstStamp = new Timestamp(usageStatsFromList.getFirstTimeStamp());
-//                Date startDate = new Date(firstStamp.getTime());
-//
-//                Timestamp lastStamp = new Timestamp(usageStatsFromList.getLastTimeStamp());
-//                Date lastDate = new Date(lastStamp.getTime());
-//
-//                if (timeSpentInMins > 0) {
-//                    Log.i(TAG, "-----------------------------------------------------------");
-//                    Log.i(TAG, "Name of the app: " + appName + " Time spent: " + timeSpentInMins + " mins. First Time Stamp: "
-//                            +  startDate + " . Last Time Stamp: " + lastDate);
-//                }
 
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e(TAG, "Failed to get stats of the app " + usageStatsFromList.getPackageName());
