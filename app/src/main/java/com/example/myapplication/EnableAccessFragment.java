@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ import java.util.concurrent.TimeUnit;
 public class EnableAccessFragment extends Fragment {
 
     private static final String TAG = EnableAccessFragment.class.getSimpleName();
+    private int mInterval = 500;
+    private Handler mHandler;
 
     public EnableAccessFragment() {
         // Required empty public constructor
@@ -49,7 +52,31 @@ public class EnableAccessFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        mHandler = new Handler();
+        mStatusChecker.run();
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacks(mStatusChecker);
+    }
+
+    Runnable mStatusChecker = new Runnable() {
+
+        @Override
+        public void run() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                if (!accessAllowed()) {
+                    mHandler.postDelayed(mStatusChecker, mInterval);
+                    Log.i(TAG, "We will continue to go down the route of checking");
+                } else {
+                    Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
+                            "from here");
+                }
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
