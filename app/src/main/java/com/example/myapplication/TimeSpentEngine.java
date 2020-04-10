@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.app.AppOpsManager;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -9,19 +8,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
-import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-
-import android.os.Handler;
-import android.provider.Settings;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -31,105 +20,30 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+public class TimeSpentEngine {
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the  factory method to
- * create an instance of this fragment.
- */
-public class EnableAccessFragment extends Fragment {
+    private static final String TAG = TimeSpentEngine.class.getSimpleName();
+    private final Context context;
 
-    private static final String TAG = EnableAccessFragment.class.getSimpleName();
-    private int mInterval = 500;
-    private Handler mHandler;
 
-    public EnableAccessFragment() {
-        // Required empty public constructor
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        mHandler = new Handler();
-        mStatusChecker.run();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mHandler.removeCallbacks(mStatusChecker);
-    }
-
-    Runnable mStatusChecker = new Runnable() {
-
-        @Override
-        public void run() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (!accessAllowed()) {
-                    mHandler.postDelayed(mStatusChecker, mInterval);
-                    Log.i(TAG, "We will continue to go down the route of checking");
-                } else {
-                    Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
-                            "from here");
-                }
-            }
-        }
-    };
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View fragmentEnableAccessView = inflater.inflate(R.layout.fragment_enable_access, container, false);
-
-        initializeComponents(fragmentEnableAccessView);
-
-        return fragmentEnableAccessView;
-    }
-
-    /**
-     * TODO: After getting access to usage data, make sure that you come back straight into the app.
-     */
-    private void initializeComponents(View fragmentEnableAccessView) {
-
-        // Initialize the components
-        final Button enableUsageButton = fragmentEnableAccessView.findViewById(R.id.enable_usage_button);
-        View.OnClickListener buttonListener = new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            @Override
-            public void onClick(View v) {
-                if (!accessAllowed()) {
-                    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-                    startActivity(intent);
-                } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                        printAppUsage();
-                        Intent intent = new Intent(getActivity(), HomeScreen.class);
-                        startActivity(intent);
-
-                    }
-                }
-            }
-        };
-        enableUsageButton.setOnClickListener(buttonListener);
+    public TimeSpentEngine(Context context) {
+        this.context = context;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void printAppUsage() {
+    public ArrayList<AppUsageInfo> getTimeSpent() {
         Log.i(TAG, "Usage access success!");
 
-        UsageStatsManager usageStatsManager = (UsageStatsManager) getActivity().getSystemService(Context.USAGE_STATS_SERVICE);
-        HashMap<String, Long> timeSpentPerApp = getTimeWithUsageEvents(usageStatsManager);
-
+        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        ArrayList<AppUsageInfo> appUsageInfos = getTimeWithUsageEvents(usageStatsManager);
+        return appUsageInfos;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private HashMap<String, Long> getTimeWithUsageEvents(UsageStatsManager usageStatsManager) {
+    private ArrayList<AppUsageInfo> getTimeWithUsageEvents(UsageStatsManager usageStatsManager) {
 
 
-        PackageManager packageManager = getActivity().getPackageManager();
+        PackageManager packageManager = context.getPackageManager();
         ArrayList<String> appsOnDevice = getInstalledApps(packageManager);
         HashMap<String, ArrayList<UsageEvents.Event>> usageInfoEventsPerApp = new HashMap<String, ArrayList<UsageEvents.Event>>();
         HashMap<String, Long> timeSpentPerApp = new HashMap<>();
@@ -171,11 +85,15 @@ public class EnableAccessFragment extends Fragment {
 
         timeSpentPerApp = getTimeSpentPerApp(usageInfoEventsPerApp);
 
+        ArrayList<AppUsageInfo> appUsageInfos = new ArrayList<AppUsageInfo>();
+
         for (String appName : timeSpentPerApp.keySet()) {
+            AppUsageInfo appUsageInfo = new AppUsageInfo(appName, timeSpentPerApp.get(appName));
+            appUsageInfos.add(appUsageInfo);
             Log.i(TAG, "App name: " + appName + " Time spent: " + TimeUnit.MILLISECONDS.toMinutes(timeSpentPerApp.get(appName)));
         }
 
-        return timeSpentPerApp;
+        return appUsageInfos;
 
     }
 
@@ -243,21 +161,6 @@ public class EnableAccessFragment extends Fragment {
         sdf.setTimeZone(TimeZone.getTimeZone("PST"));
         String formattedDate = sdf.format(date);
         return formattedDate;
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private boolean accessAllowed() {
-        try {
-            ApplicationInfo applicationInfo = getActivity().getPackageManager().getApplicationInfo(getActivity().getPackageName(), 0);
-            AppOpsManager appOpsManager = (AppOpsManager) getActivity().getSystemService(Context.APP_OPS_SERVICE);
-            int mode = appOpsManager.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, applicationInfo.uid, applicationInfo.packageName);
-            Log.i(TAG, "Do we have access to see usage data? " + (mode == AppOpsManager.MODE_ALLOWED));
-            return (mode == AppOpsManager.MODE_ALLOWED);
-
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
 }
