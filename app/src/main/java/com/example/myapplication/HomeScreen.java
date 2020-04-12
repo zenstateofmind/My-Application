@@ -29,6 +29,9 @@ public class HomeScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.getSupportActionBar().hide();
+
         setContentView(R.layout.activity_home_screen);
 
         TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getApplicationContext());
