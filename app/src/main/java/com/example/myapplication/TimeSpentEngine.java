@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 public class TimeSpentEngine {
 
@@ -114,6 +113,13 @@ public class TimeSpentEngine {
         appUsageInfos = removeUnusedAppsData(appUsageInfos);
 
         Collections.sort(appUsageInfos, new AppUsageInfoComparator());
+
+        // Fill the percentage time spent per app. Since we have already sorted the list, we can
+        // assume that the top most is the one where we have spent most time
+        Long mostSpentTimePerApp = appUsageInfos.get(0).getTimeSpentInMilliseconds();
+        for (AppUsageInfo appUsageInfo : appUsageInfos) {
+            appUsageInfo.setPercentTimeSpent(mostSpentTimePerApp);
+        }
 
         return appUsageInfos;
     }

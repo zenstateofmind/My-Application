@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class EnableAccessFragment extends Fragment {
 
     private static final String TAG = EnableAccessFragment.class.getSimpleName();
-    private int mInterval = 500;
+    private int mInterval = 50;
     private Handler mHandler;
 
     public EnableAccessFragment() {
@@ -73,6 +73,8 @@ public class EnableAccessFragment extends Fragment {
                 } else {
                     Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
                             "from here");
+                    Intent intent = new Intent(getActivity(), HomeScreen.class);
+                    startActivity(intent);
                 }
             }
         }
