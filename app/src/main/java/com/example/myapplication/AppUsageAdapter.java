@@ -18,6 +18,9 @@ public class AppUsageAdapter extends RecyclerView.Adapter<AppUsageAdapter.AppUsa
     private ArrayList<AppUsageInfo> dataset;
     private static final String TAG = AppUsageAdapter.class.getSimpleName();
 
+    //TODO: THIS NEEDS TO BE FIXED. IS IT IN DIP OR PIXEL? VARIES BY PHONE!
+    private static final int USAGE_BAR_BASE_WIDTH = 875;
+
     public static class AppUsageViewHolder extends RecyclerView.ViewHolder {
 
         public TextView appNameSingleView;
@@ -58,7 +61,7 @@ public class AppUsageAdapter extends RecyclerView.Adapter<AppUsageAdapter.AppUsa
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.usageBar.getLayoutParams();
         Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);
-        params.width = (int) (params.width * appUsageInfo.getPercentTimeSpent());
+        params.width = (int) (USAGE_BAR_BASE_WIDTH * appUsageInfo.getPercentTimeSpent());
         Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " time spent: " + params.width);
         holder.usageBar.setLayoutParams(params);
     }

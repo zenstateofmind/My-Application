@@ -17,11 +17,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+
 import java.util.ArrayList;
 
 public class HomeScreen extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -29,23 +33,7 @@ public class HomeScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        this.getSupportActionBar().hide();
-
         setContentView(R.layout.activity_home_screen);
-
-        TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getApplicationContext());
-        ArrayList<AppUsageInfo> timeSpentPerApp = timeSpentEngine.getTimeSpent();
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.app_usage_data_recycler_view);
-        recyclerView.setHasFixedSize(true);
-
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new AppUsageAdapter(timeSpentPerApp);
-        recyclerView.setAdapter(adapter);
-
     }
 
 
