@@ -8,4 +8,6 @@
     <color name="home_screen_background">#FAF0E3</color>
     <color name="grey">#757575</color>
     <color name="red">#FB6D5B</color>
+    <color name="graph_foundation">#CCCCCC</color>
+    <color name="dark_grey">#5A6175</color>
 </resources>

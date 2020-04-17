@@ -12,11 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
-public class AppUsageAdapter extends RecyclerView.Adapter<AppUsageAdapter.AppUsageViewHolder> {
+public class AppUsageAdapter extends RecyclerView.Adapter {
 
     private ArrayList<AppUsageInfo> dataset;
     private static final String TAG = AppUsageAdapter.class.getSimpleName();
+    private int totalTimeSpent = 0;
 
     //TODO: THIS NEEDS TO BE FIXED. IS IT IN DIP OR PIXEL? VARIES BY PHONE!
     private static final int USAGE_BAR_BASE_WIDTH = 875;
@@ -37,33 +39,88 @@ public class AppUsageAdapter extends RecyclerView.Adapter<AppUsageAdapter.AppUsa
         }
     }
 
-    public AppUsageAdapter(ArrayList<AppUsageInfo> dataset) {
-        this.dataset = dataset;
+    public static class HeroAppUsageViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView appNameSingleView;
+        public TextView timeSpentSingleView;
+        public ImageView appIconView;
+        public LinearLayout usageBar;
+        public TextView totalTimeSpent;
+
+        public HeroAppUsageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            appNameSingleView = (TextView) itemView.findViewById(R.id.app_name_indiv_view);
+            timeSpentSingleView = (TextView) itemView.findViewById(R.id.time_spent_indiv_view);
+            appIconView = (ImageView) itemView.findViewById(R.id.app_icon_single_view);
+            usageBar = (LinearLayout) itemView.findViewById(R.id.usage_bar);
+            totalTimeSpent = (TextView) itemView.findViewById(R.id.total_time_spent);
+        }
     }
 
-    @NonNull
-    @Override
-    public AppUsageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View indivAppInfo = inflater.inflate(R.layout.single_app_usage_info, parent, false);
+    public AppUsageAdapter(ArrayList<AppUsageInfo> dataset) {
+        this.dataset = dataset;
+        initializeTimeSpent();
+    }
 
-        AppUsageViewHolder viewHolder = new AppUsageViewHolder(indivAppInfo);
+    private void initializeTimeSpent() {
+        for(AppUsageInfo appUsageInfo: dataset) {
+            totalTimeSpent += appUsageInfo.getTimeSpentInMilliseconds();
+        }
+        totalTimeSpent =  (int) TimeUnit.MILLISECONDS.toMinutes(totalTimeSpent);
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        RecyclerView.ViewHolder viewHolder;
+        if (viewType == 1) {
+            View indivAppInfo = inflater.inflate(R.layout.hero_single_app_usage_info, parent, false);
+            viewHolder = new HeroAppUsageViewHolder(indivAppInfo);
+        } else {
+            View indivAppInfo = inflater.inflate(R.layout.single_app_usage_info, parent, false);
+            viewHolder = new AppUsageViewHolder(indivAppInfo);
+        }
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AppUsageAdapter.AppUsageViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         AppUsageInfo appUsageInfo = dataset.get(position);
 
-        holder.appNameSingleView.setText(appUsageInfo.getAppName());
-        holder.timeSpentSingleView.setText(appUsageInfo.getTimeSpentInMinutes().toString()+"m");
-        holder.appIconView.setImageDrawable(appUsageInfo.getAppIcon());
+        if (position == 0) {
+            ((HeroAppUsageViewHolder)holder).appNameSingleView.setText(appUsageInfo.getAppName());
+            ((HeroAppUsageViewHolder)holder).timeSpentSingleView.setText(appUsageInfo.getTimeSpentInMinutes().toString()+"m");
+            ((HeroAppUsageViewHolder)holder).appIconView.setImageDrawable(appUsageInfo.getAppIcon());
+            ((HeroAppUsageViewHolder)holder).totalTimeSpent.setText(totalTimeSpent + "m");
 
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.usageBar.getLayoutParams();
-        Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);
-        params.width = (int) (USAGE_BAR_BASE_WIDTH * appUsageInfo.getPercentTimeSpent());
-        Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " time spent: " + params.width);
-        holder.usageBar.setLayoutParams(params);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((HeroAppUsageViewHolder)holder).usageBar.getLayoutParams();
+            Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);
+            params.width = (int) (USAGE_BAR_BASE_WIDTH * appUsageInfo.getPercentTimeSpent());
+            Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " time spent: " + params.width);
+            ((HeroAppUsageViewHolder)holder).usageBar.setLayoutParams(params);
+
+        } else {
+            ((AppUsageViewHolder)holder).appNameSingleView.setText(appUsageInfo.getAppName());
+            ((AppUsageViewHolder)holder).timeSpentSingleView.setText(appUsageInfo.getTimeSpentInMinutes().toString()+"m");
+            ((AppUsageViewHolder)holder).appIconView.setImageDrawable(appUsageInfo.getAppIcon());
+
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((AppUsageViewHolder)holder).usageBar.getLayoutParams();
+            Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);
+            params.width = (int) (USAGE_BAR_BASE_WIDTH * appUsageInfo.getPercentTimeSpent());
+            Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " time spent: " + params.width);
+            ((AppUsageViewHolder)holder).usageBar.setLayoutParams(params);
+        }
+
     }
 
     @Override
