@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +24,7 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
     private int totalTimeSpent = 0;
 
     //TODO: THIS NEEDS TO BE FIXED. IS IT IN DIP OR PIXEL? VARIES BY PHONE!
-    private static final int USAGE_BAR_BASE_WIDTH = 875;
+    private static int USAGE_BAR_BASE_WIDTH = 0;
 
     public static class AppUsageViewHolder extends RecyclerView.ViewHolder {
 
@@ -59,6 +62,7 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
 
     public AppUsageAdapter(ArrayList<AppUsageInfo> dataset) {
         this.dataset = dataset;
+        USAGE_BAR_BASE_WIDTH = (int) (Resources.getSystem().getDisplayMetrics().widthPixels * .60);
         initializeTimeSpent();
     }
 
@@ -101,7 +105,9 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
             ((HeroAppUsageViewHolder)holder).appNameSingleView.setText(appUsageInfo.getAppName());
             ((HeroAppUsageViewHolder)holder).timeSpentSingleView.setText(appUsageInfo.getTimeSpentInMinutes().toString()+"m");
             ((HeroAppUsageViewHolder)holder).appIconView.setImageDrawable(appUsageInfo.getAppIcon());
-            ((HeroAppUsageViewHolder)holder).totalTimeSpent.setText(totalTimeSpent + "m");
+            int hours = totalTimeSpent/60;
+            int mins = totalTimeSpent%60;
+            ((HeroAppUsageViewHolder)holder).totalTimeSpent.setText(hours+"h " + mins + "m");
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((HeroAppUsageViewHolder)holder).usageBar.getLayoutParams();
             Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);

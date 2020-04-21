@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class EnableAccessFragment extends Fragment {
 
     private static final String TAG = EnableAccessFragment.class.getSimpleName();
-    private int mInterval = 50;
+    private int mInterval = 5   ;
     private Handler mHandler;
 
     public EnableAccessFragment() {

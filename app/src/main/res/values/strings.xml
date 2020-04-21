@@ -7,7 +7,7 @@
     <string name="subtitle_enable_usage">"So, here’s how we can get  started: "</string>
     <string name="bullet">\u2022 </string>
     <string name="instruction1_enable_usage">Tap the Button</string>
-    <string name="instruction2_enable_usage">Find blabla in the list and tap on blabl</string>
+    <string name="instruction2_enable_usage">Find "My Application" in the list and tap on it</string>
     <string name="instruction3_enable_usage">Toggle the button</string>
     <string name="be_more_mindful">Be more mindful</string>
     <string name="why_enable">By enabling notifications, we will remind you on a periodic basis of your phone usage patterns.</string>
