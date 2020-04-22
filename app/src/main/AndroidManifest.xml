@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".NotificationReceiver"/>
+        <receiver android:name=".AppUsageReviewNotifReceiver"/>
     </application>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
