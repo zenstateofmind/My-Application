@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- fragment_enable_access.xml -->
+    <!-- Title -->
+    <dimen name="title_text">25dp</dimen>
+
+    <!-- Button -->
+    <dimen name="button_padding_vertical">15dp</dimen>
+    <dimen name="button_padding_horizontal">81dp</dimen>
+    <dimen name="button_text_size">13dp</dimen>
+</resources>
