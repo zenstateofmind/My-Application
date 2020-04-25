@@ -6,14 +6,14 @@
     <string name="title_enable_usage">Here is how to get started: </string>
     <string name="subtitle_enable_usage">"So, here’s how we can get  started: "</string>
     <string name="bullet">\u2022 </string>
-    <string name="instruction1_enable_usage">Tap the Button</string>
-    <string name="instruction2_enable_usage">Find "My Application" in the list and tap on it</string>
+    <string name="instruction1_enable_usage">Tap \"Enable Usage Access\"</string>
+    <string name="instruction2_enable_usage">Find \"Make Me Zen\" in the list and click on it</string>
     <string name="instruction3_enable_usage">Toggle the button</string>
     <string name="be_more_mindful">Be more mindful</string>
-    <string name="why_enable">By enabling notifications, we will remind you on a periodic basis of your phone usage patterns.</string>
-    <string name="font_name">APP NAME</string>
+    <string name="why_enable">We will remind you on a periodic basis of your phone usage patterns.</string>
+    <string name="font_name">Make Me Zen</string>
     <string name="notify_example">"Yesterday, you were on your phone for 30 mins less than the day before! Great Job! "</string>
     <string name="enable_usage_access">ENABLE USAGE ACCESS</string>
-    <string name="enable_notifications">ENABLE NOTIFICATIONS</string>
+    <string name="enable_notifications">CONTINUE</string>
     <string name="ill_do_it_later">I\'LL DO IT LATER</string>
 </resources>

@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -35,32 +37,23 @@ public class EnableNotifications extends Fragment {
         // Inflate the layout for this fragment
         View enableNotificationsView = inflater.inflate(R.layout.fragment_enable_notifications, container, false);
 
-        enableComponents(enableNotificationsView);
+        initializeComponents(enableNotificationsView);
 
         return enableNotificationsView;
     }
 
-    private void enableComponents(View enableNotificationsView) {
-        Button enableNotifsButton = (Button)enableNotificationsView.findViewById(R.id.enable_notifs_button);
-        enableNotifsButton.setOnClickListener(new View.OnClickListener() {
+    private void initializeComponents(View enableNotificationsView) {
+
+        // Initialize the components
+        final Button enableUsageButton = enableNotificationsView.findViewById(R.id.enable_notifs_button);
+        View.OnClickListener buttonListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
-//
-//                //for Android 5-7
-//                intent.putExtra("app_package", getActivity().getPackageName());
-//                intent.putExtra("app_uid", getActivity().getApplicationInfo().uid);
-//
-//                // for Android 8 and above
-//                intent.putExtra("android.provider.extra.APP_PACKAGE", getActivity().getPackageName());
-//
-//                startActivity(intent);
-
-                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:"+getActivity().getPackageName()));
-                startActivityForResult(intent, 0);
-
+                Intent intent = new Intent(getActivity(), HomeScreen.class);
+                startActivity(intent);
             }
-        });
+        };
+        enableUsageButton.setOnClickListener(buttonListener);
     }
+
 }
