@@ -4,9 +4,17 @@
     <!-- Title -->
     <dimen name="title_text">25dp</dimen>
 
+    <!-- Bullet point content -->
+    <dimen name="bullet_point_text">18dp</dimen>
+
     <!-- Button -->
     <dimen name="button_padding_vertical">15dp</dimen>
     <dimen name="button_padding_horizontal">20dp</dimen>
     <dimen name="button_text_size">13dp</dimen>
+
+
+    <!-- hero_single_app_usage_info.xml -->
+    <dimen name="screen_time_margin">100dp</dimen>
+    <dimen name="progress_bar_base">170dp</dimen>
 
 </resources>

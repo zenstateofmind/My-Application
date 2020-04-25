@@ -22,6 +22,7 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
     private ArrayList<AppUsageInfo> dataset;
     private static final String TAG = AppUsageAdapter.class.getSimpleName();
     private int totalTimeSpent = 0;
+    private Resources resources;
 
     //TODO: THIS NEEDS TO BE FIXED. IS IT IN DIP OR PIXEL? VARIES BY PHONE!
     private static int USAGE_BAR_BASE_WIDTH = 0;
@@ -60,9 +61,11 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public AppUsageAdapter(ArrayList<AppUsageInfo> dataset) {
+    public AppUsageAdapter(ArrayList<AppUsageInfo> dataset, Resources resources, int dpWidth) {
         this.dataset = dataset;
-        USAGE_BAR_BASE_WIDTH = (int) (Resources.getSystem().getDisplayMetrics().widthPixels * .60);
+        this.resources = resources;
+//        USAGE_BAR_BASE_WIDTH = (int) (resources.getDimension(R.dimen.progress_bar_base));
+        USAGE_BAR_BASE_WIDTH = dpWidth;
         initializeTimeSpent();
     }
 
@@ -111,7 +114,11 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((HeroAppUsageViewHolder)holder).usageBar.getLayoutParams();
             Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);
+//            USAGE_BAR_BASE_WIDTH * resources.getDisplayMetrics().density;
+
             params.width = (int) (USAGE_BAR_BASE_WIDTH * appUsageInfo.getPercentTimeSpent());
+//            params.width = (int) (600);
+
             Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " time spent: " + params.width);
             ((HeroAppUsageViewHolder)holder).usageBar.setLayoutParams(params);
 

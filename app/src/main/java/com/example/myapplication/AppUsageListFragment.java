@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +125,15 @@ public class AppUsageListFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new AppUsageAdapter(timeSpentPerApp);
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int pxWidth = (int)(displayMetrics.widthPixels * .5);
+        float dpWidth = (float)((displayMetrics.widthPixels) / displayMetrics.density * .51);
+//
+//        final float scale = getContext().getResources().getDisplayMetrics().density;
+//        int pixels = (int) (dpWidth * scale + 0.5f);
+
+
+        adapter = new AppUsageAdapter(timeSpentPerApp, getResources(), (int)pxWidth);
         recyclerView.setAdapter(adapter);
 
 

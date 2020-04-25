@@ -116,9 +116,11 @@ public class TimeSpentEngine {
 
         // Fill the percentage time spent per app. Since we have already sorted the list, we can
         // assume that the top most is the one where we have spent most time
-        Long mostSpentTimePerApp = appUsageInfos.get(0).getTimeSpentInMilliseconds();
-        for (AppUsageInfo appUsageInfo : appUsageInfos) {
-            appUsageInfo.setPercentTimeSpent(mostSpentTimePerApp);
+        if (appUsageInfos.size() > 0) {
+            Long mostSpentTimePerApp = appUsageInfos.get(0).getTimeSpentInMilliseconds();
+            for (AppUsageInfo appUsageInfo : appUsageInfos) {
+                appUsageInfo.setPercentTimeSpent(mostSpentTimePerApp);
+            }
         }
 
         return appUsageInfos;

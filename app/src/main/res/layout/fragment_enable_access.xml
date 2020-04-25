@@ -34,7 +34,7 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="@string/title_enable_usage"
                 android:letterSpacing="0.05"
-                android:textSize="30dip"
+                android:textSize="@dimen/title_text"
                 android:textStyle="bold" />
 
 
@@ -59,7 +59,7 @@
                     android:letterSpacing="0.02"
                     android:fontFamily="@font/proxima_nova_regular"
                     android:text="@string/instruction1_enable_usage"
-                    android:textSize="22dip" />
+                    android:textSize="@dimen/bullet_point_text" />
 
             </LinearLayout>
 
@@ -84,7 +84,7 @@
                     android:letterSpacing="0.02"
                     android:fontFamily="@font/proxima_nova_regular"
                     android:text="@string/instruction2_enable_usage"
-                    android:textSize="22dip" />
+                    android:textSize="@dimen/bullet_point_text" />
 
             </LinearLayout>
 
@@ -108,7 +108,7 @@
                     android:fontFamily="@font/proxima_nova_regular"
                     android:layout_marginBottom="22dip"
                     android:text="@string/instruction3_enable_usage"
-                    android:textSize="22dip" />
+                    android:textSize="@dimen/bullet_point_text" />
 
             </LinearLayout>
 
