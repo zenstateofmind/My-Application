@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_vanilla_background"
     tools:context=".EnableNotifications">
 
     <!--<ImageView
@@ -16,14 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="54dip">
+        android:paddingTop="@dimen/parent_linear_layout_padding">
 
         <!--  Top half of the section - other than the button  -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
-            android:layout_weight="2">
+            android:layout_weight="4">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -34,7 +34,7 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="@string/be_more_mindful"
                 android:letterSpacing="0.02"
-                android:textSize="28dip"
+                android:textSize="@dimen/enable_notif_title_text"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,7 +46,7 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="@string/why_enable"
                 android:letterSpacing="0.01"
-                android:textSize="15dip" />
+                android:textSize="@dimen/enable_notif_subtitle_text" />
 
             <!--  Fake notification box  -->
             <LinearLayout
@@ -90,7 +90,7 @@
                     android:text="@string/notify_example"
                     android:fontFamily="@font/proxima_nova_regular"
                     android:textColor="@color/black"
-                    android:textSize="14dp"/>
+                    android:textSize="@dimen/enable_notif_notif_text"/>
 
             </LinearLayout>
 

@@ -19,4 +19,15 @@
     <dimen name="screen_time_margin">132dp</dimen>
     <dimen name="progress_bar_base">220dp</dimen>
 
+    <!-- fragment_enable_notifications.xml -->
+    <!-- Parent Linear Layout -->
+    <dimen name="parent_linear_layout_padding">54dp</dimen>
+
+    <!-- Title -->
+    <dimen name="enable_notif_title_text">28dp</dimen>
+    <dimen name="enable_notif_subtitle_text">15dp</dimen>
+
+    <dimen name="enable_notif_notif_text">14dp</dimen>
+
+
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--  ///////////////////////// -->
     <!-- fragment_enable_access.xml -->
     <!-- Title -->
     <dimen name="title_text">25dp</dimen>
@@ -12,9 +13,22 @@
     <dimen name="button_padding_horizontal">20dp</dimen>
     <dimen name="button_text_size">13dp</dimen>
 
-
+    <!--  ///////////////////////// -->
     <!-- hero_single_app_usage_info.xml -->
     <dimen name="screen_time_margin">100dp</dimen>
     <dimen name="progress_bar_base">170dp</dimen>
+
+
+    <!--  ///////////////////////// -->
+    <!-- fragment_enable_notifications.xml -->
+    <!-- Parent Linear Layout -->
+    <dimen name="parent_linear_layout_padding">32dp</dimen>
+
+    <!-- Title -->
+    <dimen name="enable_notif_title_text">22sp</dimen>
+    <dimen name="enable_notif_subtitle_text">13sp</dimen>
+
+    <dimen name="enable_notif_notif_text">12sp</dimen>
+
 
 </resources>

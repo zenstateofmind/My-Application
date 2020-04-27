@@ -31,7 +31,7 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
     public static String CHANNEL_ID = "APP_REMINDER_ID";
     public static String NOTIFICATION_ID = "notification-id";
-    public static Long overuseMinutes = 20L;
+    public static Long overuseMinutes = 60L;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override

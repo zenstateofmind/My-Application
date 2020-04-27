@@ -64,7 +64,6 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
     public AppUsageAdapter(ArrayList<AppUsageInfo> dataset, Resources resources, int dpWidth) {
         this.dataset = dataset;
         this.resources = resources;
-//        USAGE_BAR_BASE_WIDTH = (int) (resources.getDimension(R.dimen.progress_bar_base));
         USAGE_BAR_BASE_WIDTH = dpWidth;
         initializeTimeSpent();
     }

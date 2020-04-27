@@ -47,7 +47,8 @@ public class AppUsageInfo {
     }
 
     public void setPercentTimeSpent(Long maxTimeSpentOnApp) {
-        percentTimeSpent = (timeSpent.doubleValue()/maxTimeSpentOnApp);
+
+        percentTimeSpent = (getTimeSpentInMinutes().doubleValue()/TimeUnit.MILLISECONDS.toMinutes(maxTimeSpentOnApp));
         Log.i(TAG, "App Name: " + appName + " Max Time Spent: " + maxTimeSpentOnApp + " percent: " + percentTimeSpent);
 
     }
