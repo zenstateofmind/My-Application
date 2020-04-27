@@ -47,6 +47,12 @@ public class AppUsageListFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+//        kickStartAlarmManager();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
@@ -63,9 +69,6 @@ public class AppUsageListFragment extends Fragment {
 
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.red));
         }
-
-        kickStartAlarmManager();
-
 //        testNotify();
     }
 
@@ -153,7 +156,6 @@ public class AppUsageListFragment extends Fragment {
 //
 //        final float scale = getContext().getResources().getDisplayMetrics().density;
 //        int pixels = (int) (dpWidth * scale + 0.5f);
-
 
         adapter = new AppUsageAdapter(timeSpentPerApp, getResources(), (int)pxWidth);
         recyclerView.setAdapter(adapter);

@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.app.AlarmManager;
 import android.app.AppOpsManager;
+import android.app.PendingIntent;
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
@@ -44,6 +47,9 @@ public class EnableAccessFragment extends Fragment {
     private int mInterval = 5;
     private Handler mHandler;
     private boolean goToNotifEducation = false;
+
+    private AlarmManager alarmManager;
+    private PendingIntent alarmIntent;
 
     public EnableAccessFragment() {
         // Required empty public constructor
@@ -77,6 +83,7 @@ public class EnableAccessFragment extends Fragment {
                     Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
                             "from here");
                     if (goToNotifEducation) {
+                        kickStartAlarmManager();
                         Intent intent = new Intent(getActivity(), NotificationEducation.class);
                         startActivity(intent);
                     } else {
@@ -89,6 +96,27 @@ public class EnableAccessFragment extends Fragment {
             }
         }
     };
+
+    private void kickStartAlarmManager() {
+
+        // Set the alarm to start at approximately 2:00 p.m.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 21);
+        calendar.set(Calendar.MINUTE, 54);
+
+        alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), AppUsageReviewNotifReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+
+//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//                SystemClock.elapsedRealtime() + 60*100,
+//                alarmIntent);
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

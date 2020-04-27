@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
@@ -31,7 +32,7 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
     public static String CHANNEL_ID = "APP_REMINDER_ID";
     public static String NOTIFICATION_ID = "notification-id";
-    public static Long overuseMinutes = 60L;
+    public static Long overuseMinutes = 20L;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -67,7 +68,9 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, homeScreenLaunchIntent, 0);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.drawable.button_rounded)
+                    .setSmallIcon(R.drawable.vector_drawable_group102)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.mipmap.ic_launcher_round))
                     .setContentTitle("Usage Report")
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(notifText))
                     .setContentIntent(pendingIntent)
