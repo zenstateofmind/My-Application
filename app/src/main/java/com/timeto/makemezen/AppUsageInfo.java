@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.timeto.makemezen;
 
 import android.graphics.drawable.Drawable;
 import android.util.Log;

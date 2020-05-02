@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.timeto.makemezen;
 
 import android.app.usage.UsageEvents;
 import android.app.usage.UsageStatsManager;

@@ -1,22 +1,18 @@
-package com.example.myapplication;
+package com.timeto.makemezen;
 
 import android.app.AlarmManager;
 import android.app.AppOpsManager;
 import android.app.PendingIntent;
-import android.app.usage.UsageEvents;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
 import android.provider.Settings;
@@ -26,14 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TimeZone;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -97,13 +86,22 @@ public class EnableAccessFragment extends Fragment {
         }
     };
 
+    /**
+     * Three types of notifications:
+     * 1. Week end review - how many hours of the app used over the entire week
+     * 2. Morning review - Encouragement push
+     *                      If hours spent yesterday than the day before, praise!
+     *                      TODO: This will be added after we enable features to show time spent across different days
+     * 3. Evening push - If any app has more than > x hours -> call that out. Else total amount of
+     *                  time spent on the app so far.
+     */
     private void kickStartAlarmManager() {
 
         // Set the alarm to start at approximately 2:00 p.m.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 21);
-        calendar.set(Calendar.MINUTE, 54);
+        calendar.set(Calendar.HOUR_OF_DAY, 20);
+        calendar.set(Calendar.MINUTE, 00);
 
         alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getContext(), AppUsageReviewNotifReceiver.class);
@@ -111,10 +109,6 @@ public class EnableAccessFragment extends Fragment {
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent);
-
-//        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-//                SystemClock.elapsedRealtime() + 60*100,
-//                alarmIntent);
 
     }
 

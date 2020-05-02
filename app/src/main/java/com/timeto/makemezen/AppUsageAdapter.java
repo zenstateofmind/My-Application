@@ -1,7 +1,6 @@
-package com.example.myapplication;
+package com.timeto.makemezen;
 
 import android.content.res.Resources;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 

@@ -48,7 +48,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.myapplication.AppUsageListFragment"
+        android:name="com.timeto.makemezen.AppUsageListFragment"
         android:id="@+id/app_usage_list_fragment"/>
 
 
