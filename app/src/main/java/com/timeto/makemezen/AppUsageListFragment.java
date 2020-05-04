@@ -25,6 +25,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.amplitude.api.Amplitude;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -76,6 +78,7 @@ public class AppUsageListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Amplitude.getInstance().logEvent("Resume app usage list");
         setUpTimeSpentRecycleView(getView());
     }
 
@@ -136,6 +139,7 @@ public class AppUsageListFragment extends Fragment {
         // Inflate the layout for this fragment
         View appUsageListFragmentView = inflater.inflate(R.layout.fragment_app_usage_list, container, false);
         setUpTimeSpentRecycleView(appUsageListFragmentView);
+        Amplitude.getInstance().logEvent("Create app usage list");
         return appUsageListFragmentView;
     }
 
