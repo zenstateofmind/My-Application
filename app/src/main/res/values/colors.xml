@@ -5,10 +5,12 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="home_screen_background">#FAF0E3</color>
+    <color name="home_screen_background">#FBF6EE</color>
     <color name="light_vanilla_background">#FFFAF3</color>
     <color name="grey">#757575</color>
     <color name="red">#FB6D5B</color>
     <color name="graph_foundation">#CCCCCC</color>
     <color name="dark_grey">#5A6175</color>
+    <color name="calendar_background">#FFEFD3</color>
+    <color name="calendar_focus_background">#FDC199</color>
 </resources>
