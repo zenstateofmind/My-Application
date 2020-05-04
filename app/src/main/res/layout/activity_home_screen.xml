@@ -46,7 +46,7 @@
 <!--    </LinearLayout>-->
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="88dp"
         android:fontFamily="@font/proxima_nova_bold"
         android:textSize="36sp"
         android:gravity="center_vertical"
@@ -75,15 +75,25 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="Fri"
                 android:id="@+id/first_day_name"/>
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:id="@+id/first_day_date"
-                android:text="11"/>
+                android:gravity="center_horizontal"
+                android:id="@+id/first_day_date_layout">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/first_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -102,15 +112,22 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="Fri"
                 android:id="@+id/second_day_name"/>
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:id="@+id/second_day_date"
-                android:text="11"/>
+                android:gravity="center_horizontal"
+                android:id="@+id/second_day_date_layout">
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/second_day_date"
+                    android:text="11"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -129,15 +146,22 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="Fri"
                 android:id="@+id/third_day_name"/>
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:id="@+id/third_day_date"
-                android:text="11"/>
+                android:gravity="center_horizontal"
+                android:id="@+id/third_day_date_layout">
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/third_day_date"
+                    android:text="11"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -156,15 +180,23 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="Fri"
                 android:id="@+id/fourth_day_name"/>
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:id="@+id/fourth_day_date"
-                android:text="11"/>
+                android:gravity="center_horizontal"
+                android:id="@+id/fourth_day_date_layout">
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/fourth_day_date"
+                    android:text="11"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -174,6 +206,7 @@
             android:layout_weight="1"
             android:id="@+id/fifth_day"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -183,15 +216,22 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="Fri"
                 android:id="@+id/fifth_day_name"/>
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:id="@+id/fifth_day_date"
-                android:text="11"/>
+                android:gravity="center_horizontal"
+                android:id="@+id/fifth_day_date_layout">
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/fifth_day_date"
+                    android:text="11"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -210,15 +250,23 @@
                 android:fontFamily="@font/proxima_nova_regular"
                 android:text="Fri"
                 android:id="@+id/sixth_day_name"/>
-            <TextView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:fontFamily="@font/proxima_nova_regular"
-                android:id="@+id/sixth_day_date"
-                android:text="11"/>
+                android:gravity="center_horizontal"
+                android:id="@+id/sixth_day_date_layout">
+
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:textSize="14dp"
+                    android:gravity="center"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/sixth_day_date"
+                    android:text="11"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -240,13 +288,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center_horizontal"
+                android:id="@+id/seventh_day_date_layout">
                 <TextView
                     android:background="@drawable/circle"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:textSize="14dp"
                     android:gravity="center"
                     android:fontFamily="@font/proxima_nova_regular"
