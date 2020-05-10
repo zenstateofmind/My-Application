@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="10dp"
+    tools:context=".CalendarViewFragment"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/activity_home_screen_title_height"
+        android:fontFamily="@font/proxima_nova_bold"
+        android:textSize="@dimen/activity_home_screen_title"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="Today"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal"
+        android:id="@+id/day_selector">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/first_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_shape"
+                android:layout_height="match_parent"
+                android:id="@+id/first_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/first_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/first_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/second_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_shape"
+                android:layout_height="match_parent"
+                android:id="@+id/second_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/second_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/second_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/third_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_shape"
+                android:layout_height="match_parent"
+                android:id="@+id/third_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/third_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/third_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/fourth_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_shape"
+                android:layout_height="match_parent"
+                android:id="@+id/fourth_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/fourth_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/fourth_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/fifth_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_shape"
+                android:layout_height="match_parent"
+                android:id="@+id/fifth_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/fifth_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/fifth_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/sixth_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_shape"
+                android:layout_height="match_parent"
+                android:id="@+id/sixth_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/sixth_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/sixth_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/seventh_day_parent_layout"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="8"
+                android:background="@drawable/calendar_curved_orange"
+                android:layout_height="match_parent"
+                android:id="@+id/seventh_day"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:gravity="bottom|center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:text="Fri"
+                    android:id="@+id/seventh_day_name"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="11dp"
+                    android:layout_marginTop="2dp"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/proxima_nova_regular"
+                    android:id="@+id/seventh_day_date"
+                    android:text="11"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
