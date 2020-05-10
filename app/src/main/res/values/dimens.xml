@@ -31,4 +31,9 @@
     <dimen name="enable_notif_notif_text">12sp</dimen>
 
 
+    <!--  ///////////////////////// -->
+    <!-- activity_home_screen.xml -->
+    <dimen name="activity_home_screen_title">20sp</dimen>
+    <dimen name="activity_home_screen_title_height">60dp</dimen>
+
 </resources>
