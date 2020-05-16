@@ -34,16 +34,17 @@ public class TimeSpentEngine {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public ArrayList<AppUsageInfo> getTimeSpent() {
+    public ArrayList<AppUsageInfo> getTimeSpent(Long startTime, Long endTime) {
+
         Log.i(TAG, "Usage access success!");
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
-        ArrayList<AppUsageInfo> appUsageInfos = getTimeWithUsageEvents(usageStatsManager);
+        ArrayList<AppUsageInfo> appUsageInfos = getTimeWithUsageEvents(usageStatsManager, startTime, endTime);
         return appUsageInfos;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private ArrayList<AppUsageInfo> getTimeWithUsageEvents(UsageStatsManager usageStatsManager) {
+    private ArrayList<AppUsageInfo> getTimeWithUsageEvents(UsageStatsManager usageStatsManager, Long startTime, Long endTime) {
 
         PackageManager packageManager = context.getPackageManager();
         ArrayList<String> appsOnDevice = getInstalledApps(packageManager);
@@ -57,7 +58,7 @@ public class TimeSpentEngine {
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
-        UsageEvents usageEvents = usageStatsManager.queryEvents(c.getTimeInMillis(), System.currentTimeMillis());
+        UsageEvents usageEvents = usageStatsManager.queryEvents(startTime, endTime);
 
         while (usageEvents.hasNextEvent()) {
             UsageEvents.Event currentEvent = new UsageEvents.Event();

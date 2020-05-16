@@ -49,6 +49,7 @@ public class EnableNotifications extends Fragment {
                 startActivity(intent);
             }
         };
+
         enableUsageButton.setOnClickListener(buttonListener);
     }
 

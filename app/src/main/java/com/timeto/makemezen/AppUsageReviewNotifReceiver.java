@@ -13,9 +13,13 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.amplitude.api.Amplitude;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
@@ -33,14 +37,24 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
     public static String CHANNEL_ID = "APP_REMINDER_ID";
     public static String NOTIFICATION_ID = "notification-id";
     public static Long overuseMinutes = 60L;
+    private final static AtomicInteger c = new AtomicInteger(0);
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        Amplitude.getInstance().logEvent("Notify the user");
+
         TimeSpentEngine engine = new TimeSpentEngine(context);
 
-        ArrayList<AppUsageInfo> appUsageInfos = engine.getTimeSpent();
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        ArrayList<AppUsageInfo> appUsageInfos = engine.getTimeSpent(c.getTimeInMillis(), System.currentTimeMillis());
         ArrayList<String> overusedApps = overusedApps(context, overuseMinutes, appUsageInfos);
         int totalTimeSpent = 0;
         String notifText = "";
@@ -67,6 +81,8 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
              notifText = "You have spent more than an hour on " + overUsedAppStringified + " today.";
 
+            Amplitude.getInstance().logEvent("More than an hour on an app");
+
         } else {
 
             for(AppUsageInfo appUsageInfo: appUsageInfos) {
@@ -86,6 +102,7 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
                 notifText = "You have spent " + hours + " hours and " + mins + " mins on your phone today. Learn more!";
             }
 
+            Amplitude.getInstance().logEvent("Less than an hour on an app");
         }
 
         Intent homeScreenLaunchIntent = new Intent(context, HomeScreen.class);
@@ -104,8 +121,13 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
         Notification dailyNotification = builder.build();
 
-        notificationManager.notify(1, dailyNotification);
+        notificationManager.notify(getID(), dailyNotification);
+        Amplitude.getInstance().logEvent("Notification sent");
 
+    }
+
+    public static int getID() {
+        return c.incrementAndGet();
     }
 
     // Create a method that returns apps that you have spent more than an x mins during the day (till now).

@@ -1,19 +1,14 @@
 package com.timeto.makemezen;
 
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,7 +74,23 @@ public class AppUsageListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Amplitude.getInstance().logEvent("Resume app usage list");
-        setUpTimeSpentRecycleView(getView());
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        if (this.getArguments() != null ) {
+            Long startTimeForData = this.getArguments().getLong(MakeMeZenConstants.START_DATE_MILLISECONDS);
+            if (startTimeForData == c.getTimeInMillis()) {
+                setUpTimeSpentRecycleView(getView(), startTimeForData, System.currentTimeMillis());
+            }
+        } else {
+            setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+        }
+
+//        setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -88,15 +99,36 @@ public class AppUsageListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View appUsageListFragmentView = inflater.inflate(R.layout.fragment_app_usage_list, container, false);
-        setUpTimeSpentRecycleView(appUsageListFragmentView);
+
+        Long startTimeForData = 0L;
+        Long endTimeForData = 0L;
+
+        if (this.getArguments() != null) {
+            startTimeForData = this.getArguments().getLong(MakeMeZenConstants.START_DATE_MILLISECONDS);
+            endTimeForData = this.getArguments().getLong(MakeMeZenConstants.END_DATE_MILLISECONDS);
+
+        } else {
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+            c.set(Calendar.MILLISECOND, 0);
+
+            startTimeForData = c.getTimeInMillis();
+            endTimeForData = System.currentTimeMillis();
+
+        }
+
+        setUpTimeSpentRecycleView(appUsageListFragmentView, startTimeForData, endTimeForData);
         Amplitude.getInstance().logEvent("Create app usage list");
         return appUsageListFragmentView;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void setUpTimeSpentRecycleView(View appUsageListFragmentView) {
+    private void setUpTimeSpentRecycleView(View appUsageListFragmentView, Long startTimeForData, Long endTimeForData) {
+
         TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
-        ArrayList<AppUsageInfo> timeSpentPerApp = timeSpentEngine.getTimeSpent();
+        ArrayList<AppUsageInfo> timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
 
         RecyclerView recyclerView = (RecyclerView) appUsageListFragmentView.findViewById(R.id.app_usage_data_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -107,13 +139,10 @@ public class AppUsageListFragment extends Fragment {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         int pxWidth = (int)(displayMetrics.widthPixels * .5);
         float dpWidth = (float)((displayMetrics.widthPixels) / displayMetrics.density * .51);
-//
-//        final float scale = getContext().getResources().getDisplayMetrics().density;
-//        int pixels = (int) (dpWidth * scale + 0.5f);
+
 
         adapter = new AppUsageAdapter(timeSpentPerApp, getResources(), (int)pxWidth);
         recyclerView.setAdapter(adapter);
-
 
     }
 
