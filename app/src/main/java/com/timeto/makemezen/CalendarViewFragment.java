@@ -58,6 +58,7 @@ public class CalendarViewFragment extends Fragment {
         final LinearLayout seventhDayLayout = calendarViewFragment.findViewById(R.id.seventh_day);
 
         firstDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable firstDayOriginalBackground = firstDayLayout.getBackground();
@@ -84,21 +85,25 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.SECOND, 0);
                     endTime.set(Calendar.MILLISECOND, 0);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
 
             }
         });
 
         secondDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable secondDayOriginalBackground = secondDayLayout.getBackground();
@@ -126,15 +131,18 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.SECOND, 0);
                     endTime.set(Calendar.MILLISECOND, 0);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
             }
         });
@@ -167,20 +175,24 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.SECOND, 0);
                     endTime.set(Calendar.MILLISECOND, 0);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
             }
         });
 
         fourthDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable fourthDayOriginalBackground = fourthDayLayout.getBackground();
@@ -207,20 +219,24 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.SECOND, 0);
                     endTime.set(Calendar.MILLISECOND, 0);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
             }
         });
 
         fifthDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable fifthDayOriginalBackground = fifthDayLayout.getBackground();
@@ -247,20 +263,24 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.SECOND, 0);
                     endTime.set(Calendar.MILLISECOND, 0);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
             }
         });
 
         sixthDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable sixthDayOriginalBackground = sixthDayLayout.getBackground();
@@ -288,15 +308,18 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.SECOND, 0);
                     endTime.set(Calendar.MILLISECOND, 0);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
             }
         });
@@ -322,19 +345,19 @@ public class CalendarViewFragment extends Fragment {
                     startTime.set(Calendar.SECOND, 0);
                     startTime.set(Calendar.MILLISECOND, 0);
 
-//                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-//                    appUsageFragment.testUpdateTodayData(startTime.getTimeInMillis(), System.currentTimeMillis());
+                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), System.currentTimeMillis());
 
 
-                    Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, System.currentTimeMillis());
-                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
-                    appUsageListFragment.setArguments(bundle);
-
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
-                    transaction.commit();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+//                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, System.currentTimeMillis());
+//                    AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
+//                    appUsageListFragment.setArguments(bundle);
+//
+//                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                    transaction.replace(R.id.app_usage_list_fragment, appUsageListFragment);
+//                    transaction.commit();
                 }
             }
         });

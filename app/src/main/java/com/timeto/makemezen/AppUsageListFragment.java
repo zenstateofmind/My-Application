@@ -27,6 +27,7 @@ import com.amplitude.api.Amplitude;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -39,6 +40,7 @@ public class AppUsageListFragment extends Fragment {
     public static String CHANNEL_ID = "APP_REMINDER_ID";
     public static String NOTIFICATION_ID = "notification-id";
     private static String LOG  = AppUsageListFragment.class.getSimpleName();
+    private static Long DELTA_UPDATE = 3L;
 
     private AlarmManager alarmManager;
     private PendingIntent alarmIntent;
@@ -81,11 +83,22 @@ public class AppUsageListFragment extends Fragment {
 
         Calendar c = getTodayStartTimeCal();
 
-        if (this.getArguments() == null) {
+        if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
             setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
         }
 
-//        setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+//        if (this.getArguments() == null) {
+//            if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
+//                setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+//            }
+//        } else {
+//            Long startTimeForData = this.getArguments().getLong(MakeMeZenUtil.START_DATE_MILLISECONDS);
+//
+//            if (startTimeForData == c.getTimeInMillis() && lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
+//                setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+//            }
+//        }
+
     }
 
 
@@ -100,18 +113,27 @@ public class AppUsageListFragment extends Fragment {
         Long startTimeForData = 0L;
         Long endTimeForData = 0L;
 
-        if (this.getArguments() != null) {
-            startTimeForData = this.getArguments().getLong(MakeMeZenUtil.START_DATE_MILLISECONDS);
-            endTimeForData = this.getArguments().getLong(MakeMeZenUtil.END_DATE_MILLISECONDS);
+//        if (this.getArguments() != null) {
+//            startTimeForData = this.getArguments().getLong(MakeMeZenUtil.START_DATE_MILLISECONDS);
+//            endTimeForData = this.getArguments().getLong(MakeMeZenUtil.END_DATE_MILLISECONDS);
+//
+//        } else {
+//            Calendar c = getTodayStartTimeCal();
+//
+//            startTimeForData = c.getTimeInMillis();
+//            endTimeForData = System.currentTimeMillis();
+//        }
 
-        } else {
-            Calendar c = getTodayStartTimeCal();
+        Calendar c = getTodayStartTimeCal();
 
-            startTimeForData = c.getTimeInMillis();
-            endTimeForData = System.currentTimeMillis();
+        startTimeForData = c.getTimeInMillis();
+        endTimeForData = System.currentTimeMillis();
+
+        if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
+            setupDataAndView(appUsageListFragmentView, c.getTimeInMillis(), System.currentTimeMillis());
         }
 
-        setupDataAndView(appUsageListFragmentView, startTimeForData, endTimeForData);
+//        setupDataAndView(appUsageListFragmentView, startTimeForData, endTimeForData);
         Amplitude.getInstance().logEvent("Create app usage list");
         return appUsageListFragmentView;
     }
@@ -157,7 +179,8 @@ public class AppUsageListFragment extends Fragment {
             timeSpentPerApp = MakeMeZenUtil.getAppUsageInfoList(dataForTheDay, getContext());
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
-            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis() &&
+                    lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
 
                 new UpdateTodaysDataUsageTask().execute(startTimeForData, endTimeForData);
 //                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
@@ -180,6 +203,12 @@ public class AppUsageListFragment extends Fragment {
             String key = MakeMeZenUtil.createKey(startTimeForData);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(key, appUsageInfoObjectsString);
+
+
+            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+                editor.putString(MakeMeZenUtil.lastUpdateKey(), MakeMeZenUtil.lastUpdateTodayData(endTimeForData));
+            }
+
             editor.commit();
 
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
@@ -217,8 +246,25 @@ public class AppUsageListFragment extends Fragment {
         return false;
     }
 
+    private boolean lastUpdateTimeForTodaysDataGreaterThan(Long currentTimeInMilli, Long delta) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
+        Long lastSavedTimeForTodaysData = Long.parseLong(sharedPreferences.getString(MakeMeZenUtil.lastUpdateKey(), "0"));
+
+        if (lastSavedTimeForTodaysData != 0) {
+            Long currentTimeInMins = TimeUnit.MILLISECONDS.toMinutes(currentTimeInMilli);
+            Long lastSavedTime = TimeUnit.MILLISECONDS.toMinutes(lastSavedTimeForTodaysData);
+            if (currentTimeInMins - lastSavedTime > delta) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void testUpdateTodayData(Long startTime, Long endTime) {
+    public void testUpdateData(Long startTime, Long endTime) {
         setupDataAndView(getView(), startTime, endTime);
     }
 
@@ -239,6 +285,11 @@ public class AppUsageListFragment extends Fragment {
             String key = MakeMeZenUtil.createKey(startTimeForData);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(key, appUsageInfoObjectsString);
+
+            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+                editor.putString(MakeMeZenUtil.lastUpdateKey(), MakeMeZenUtil.lastUpdateTodayData(endTimeForData));
+            }
+
             editor.apply();
 
             return timeSpentPerApp;
@@ -248,7 +299,10 @@ public class AppUsageListFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<AppUsageInfo> appUsageInfos) {
             super.onPostExecute(appUsageInfos);
-            setUpTimeSpentRecycleView(getView(), appUsageInfos);
+            if (getView() != null) {
+                setUpTimeSpentRecycleView(getView(), appUsageInfos);
+            }
+
         }
     }
 }

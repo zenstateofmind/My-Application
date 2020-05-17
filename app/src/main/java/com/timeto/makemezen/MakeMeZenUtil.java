@@ -5,6 +5,8 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -14,9 +16,18 @@ public class MakeMeZenUtil {
     public static final String END_DATE_MILLISECONDS = "end_date_milliseconds";
     private static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
+    private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_TODAYS_DATA";
 
     public static String createKey(Long startDate) {
         return startDate + "";
+    }
+
+    public static String lastUpdateKey() {
+        return LAST_UPDATE_KEY;
+    }
+
+    public static String lastUpdateTodayData(Long lastDate) {
+        return lastDate + "";
     }
 
     public static String getAppUsageInfoString(AppUsageInfo appUsageInfo) {
