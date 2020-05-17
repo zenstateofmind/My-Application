@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -72,20 +73,22 @@ public class AppUsageListFragment extends Fragment {
 //        testNotify();
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        Amplitude.getInstance().logEvent("Resume app usage list");
-//
-//        Calendar c = getTodayStartTimeCal();
-//
-//        if (this.getArguments() == null) {
-//            setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-//        }
-//
-////        setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-//    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    @Override
+    public void onResume() {
+        super.onResume();
+        Amplitude.getInstance().logEvent("Resume app usage list");
+
+        Calendar c = getTodayStartTimeCal();
+
+        if (this.getArguments() == null) {
+            setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+        }
+
+//        setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+    }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -106,7 +109,6 @@ public class AppUsageListFragment extends Fragment {
 
             startTimeForData = c.getTimeInMillis();
             endTimeForData = System.currentTimeMillis();
-
         }
 
         setupDataAndView(appUsageListFragmentView, startTimeForData, endTimeForData);
@@ -121,6 +123,14 @@ public class AppUsageListFragment extends Fragment {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         return c;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+
     }
 
     // Get the data from the database
@@ -148,18 +158,21 @@ public class AppUsageListFragment extends Fragment {
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
             if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
-                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
-                timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
 
-                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
-                String key = MakeMeZenUtil.createKey(startTimeForData);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(key, appUsageInfoObjectsString);
-                editor.apply();
-
+                new UpdateTodaysDataUsageTask().execute(startTimeForData, endTimeForData);
+//                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
+//                timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
+//
+//                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
+//                String key = MakeMeZenUtil.createKey(startTimeForData);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString(key, appUsageInfoObjectsString);
+//                editor.apply();
+//
 //                setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
             }
         } else {
+
             TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
             timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
 
@@ -204,4 +217,38 @@ public class AppUsageListFragment extends Fragment {
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void testUpdateTodayData(Long startTime, Long endTime) {
+        setupDataAndView(getView(), startTime, endTime);
+    }
+
+    private class UpdateTodaysDataUsageTask extends AsyncTask<Long, Void, ArrayList<AppUsageInfo>> {
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected ArrayList<AppUsageInfo> doInBackground(Long... timings) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
+            ArrayList<AppUsageInfo> timeSpentPerApp = new ArrayList<>();
+            Long startTimeForData = timings[0];
+            Long endTimeForData = timings[1];
+
+            TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
+            timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
+
+            String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
+            String key = MakeMeZenUtil.createKey(startTimeForData);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(key, appUsageInfoObjectsString);
+            editor.apply();
+
+            return timeSpentPerApp;
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected void onPostExecute(ArrayList<AppUsageInfo> appUsageInfos) {
+            super.onPostExecute(appUsageInfos);
+            setUpTimeSpentRecycleView(getView(), appUsageInfos);
+        }
+    }
 }

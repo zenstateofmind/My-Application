@@ -1,8 +1,10 @@
 package com.timeto.makemezen;
 
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -300,6 +302,7 @@ public class CalendarViewFragment extends Fragment {
         });
 
         seventhDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable seventhDayOriginalBackground = seventhDayLayout.getBackground();
@@ -318,6 +321,10 @@ public class CalendarViewFragment extends Fragment {
                     startTime.set(Calendar.MINUTE, 0);
                     startTime.set(Calendar.SECOND, 0);
                     startTime.set(Calendar.MILLISECOND, 0);
+
+//                    AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
+//                    appUsageFragment.testUpdateTodayData(startTime.getTimeInMillis(), System.currentTimeMillis());
+
 
                     Bundle bundle = new Bundle();
                     bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
