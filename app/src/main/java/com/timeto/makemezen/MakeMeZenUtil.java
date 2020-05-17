@@ -15,17 +15,8 @@ public class MakeMeZenUtil {
     private static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
 
-    public static String createKey(Long startDate, Long endDate) {
-        return startDate + DIVIDER + endDate;
-    }
-
-    public static Long getStartDate(String sharedPrefKey) {
-        return Long.parseLong(sharedPrefKey.split(DIVIDER)[0]);
-
-    }
-
-    public static Long getEndDate(String sharedPrefKey) {
-        return Long.parseLong(sharedPrefKey.split(DIVIDER)[1]);
+    public static String createKey(Long startDate) {
+        return startDate + "";
     }
 
     public static String getAppUsageInfoString(AppUsageInfo appUsageInfo) {

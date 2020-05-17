@@ -72,25 +72,20 @@ public class AppUsageListFragment extends Fragment {
 //        testNotify();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Override
-    public void onResume() {
-        super.onResume();
-        Amplitude.getInstance().logEvent("Resume app usage list");
-
-        Calendar c = getTodayStartTimeCal();
-
-        if (this.getArguments() != null ) {
-            Long startTimeForData = this.getArguments().getLong(MakeMeZenUtil.START_DATE_MILLISECONDS);
-            if (startTimeForData == c.getTimeInMillis()) {
-                setUpTimeSpentRecycleView(getView(), startTimeForData, System.currentTimeMillis());
-            }
-        } else {
-            setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-        }
-
-//        setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        Amplitude.getInstance().logEvent("Resume app usage list");
+//
+//        Calendar c = getTodayStartTimeCal();
+//
+//        if (this.getArguments() == null) {
+//            setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+//        }
+//
+////        setUpTimeSpentRecycleView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -114,7 +109,7 @@ public class AppUsageListFragment extends Fragment {
 
         }
 
-        setUpTimeSpentRecycleView(appUsageListFragmentView, startTimeForData, endTimeForData);
+        setupDataAndView(appUsageListFragmentView, startTimeForData, endTimeForData);
         Amplitude.getInstance().logEvent("Create app usage list");
         return appUsageListFragmentView;
     }
@@ -128,31 +123,60 @@ public class AppUsageListFragment extends Fragment {
         return c;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private void setUpTimeSpentRecycleView(View appUsageListFragmentView, Long startTimeForData, Long endTimeForData) {
+    // Get the data from the database
 
+    // Get the data from engine
+
+    // if data is stored for that day -> get it from database
+    // else (a) get it from engine (b) store it in the database
+
+
+    // This holds true for all days except for today.
+    // For today -> even if it exists in the database, get it from the database render and then call
+    // (a) get it from engine (b) store it in the database
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setupDataAndView(View appUsageListFragmentView, Long startTimeForData, Long endTimeForData) {
 
         ArrayList<AppUsageInfo> timeSpentPerApp = new ArrayList<>();
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
 
-        if (startTimeForData != getTodayStartTimeCal().getTimeInMillis() && dataStored(startTimeForData, endTimeForData)) {
-            Log.i(LOG, "Data available for " + startTimeForData + " " + endTimeForData);
-            String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createKey(startTimeForData, endTimeForData), "");
+        if (dataStored(startTimeForData)) {
+            String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createKey(startTimeForData), "");
             timeSpentPerApp = MakeMeZenUtil.getAppUsageInfoList(dataForTheDay, getContext());
+            setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
+
+            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
+                timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
+
+                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
+                String key = MakeMeZenUtil.createKey(startTimeForData);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(key, appUsageInfoObjectsString);
+                editor.apply();
+
+//                setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
+            }
         } else {
             TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
             timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
 
-            if (startTimeForData != getTodayStartTimeCal().getTimeInMillis()) {
-                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
-                String key = MakeMeZenUtil.createKey(startTimeForData, endTimeForData);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(key, appUsageInfoObjectsString);
-                editor.commit();
+            String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
+            String key = MakeMeZenUtil.createKey(startTimeForData);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(key, appUsageInfoObjectsString);
+            editor.commit();
 
-                Log.i(LOG, "Added data for " + key + " value: " + appUsageInfoObjectsString);
-            }
+            setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
         }
+
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void setUpTimeSpentRecycleView(View appUsageListFragmentView, ArrayList<AppUsageInfo> timeSpentPerApp) {
 
         RecyclerView recyclerView = (RecyclerView) appUsageListFragmentView.findViewById(R.id.app_usage_data_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -167,12 +191,13 @@ public class AppUsageListFragment extends Fragment {
 
         adapter = new AppUsageAdapter(timeSpentPerApp, getResources(), (int)pxWidth);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
     }
 
-    private boolean dataStored(Long startTime, Long endTime) {
+    private boolean dataStored(Long startTime) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
-        String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createKey(startTime, endTime), "");
+        String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createKey(startTime), "");
         if (!dataForTheDay.equals("")) {
             return true;
         }
