@@ -16,4 +16,5 @@
     <string name="enable_usage_access">ENABLE USAGE ACCESS</string>
     <string name="enable_notifications">CONTINUE</string>
     <string name="ill_do_it_later">I\'LL DO IT LATER</string>
+    <string name="file_key">com.timeto.makemezen.GET_DAILY_USED_DATA</string>
 </resources>

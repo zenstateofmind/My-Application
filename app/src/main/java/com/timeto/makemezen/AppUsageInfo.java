@@ -13,22 +13,20 @@ public class AppUsageInfo {
     private Long timeSpent;
     private Drawable appIcon;
     private double percentTimeSpent;
+    private String packageName;
 
-    public AppUsageInfo(String name, Long time) {
-        this.appName = name;
-        this.timeSpent = time;
-        percentTimeSpent = 100.0;
-    }
-
-    public AppUsageInfo(String name, Drawable icon) {
-        this.appName = name;
+    public AppUsageInfo(String appName, Drawable icon, String packageName) {
+        this.appName = appName;
         this.appIcon = icon;
+        this.packageName = packageName;
         percentTimeSpent = 100.0;
     }
 
     public String getAppName() {
         return appName;
     }
+
+    public String getPackageName() {return packageName;}
 
     public Long getTimeSpentInMilliseconds() {
         return timeSpent;
@@ -42,15 +40,13 @@ public class AppUsageInfo {
         return appIcon;
     }
 
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
-
     public void setPercentTimeSpent(Long maxTimeSpentOnApp) {
-
         percentTimeSpent = (getTimeSpentInMinutes().doubleValue()/TimeUnit.MILLISECONDS.toMinutes(maxTimeSpentOnApp));
         Log.i(TAG, "App Name: " + appName + " Max Time Spent: " + maxTimeSpentOnApp + " percent: " + percentTimeSpent);
+    }
 
+    public void setPercentTimeSpentFromSharedPrefData(double percentTimeSpent) {
+        this.percentTimeSpent = percentTimeSpent;
     }
 
     public double getPercentTimeSpent() {
@@ -66,4 +62,5 @@ public class AppUsageInfo {
 
         return compareTo - getTimeSpentInMinutes().intValue();
     }
+
 }

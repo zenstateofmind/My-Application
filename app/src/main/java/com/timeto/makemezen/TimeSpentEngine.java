@@ -83,7 +83,7 @@ public class TimeSpentEngine {
                             appRelatedEvents = usageInfoEventsPerApp.get(appName);
                         } else {
                             // If we have not come across this app yet...
-                            AppUsageInfo appUsageInfo = new AppUsageInfo(appName, applicationIcon);
+                            AppUsageInfo appUsageInfo = new AppUsageInfo(appName, applicationIcon, currentEvent.getPackageName());
                             appUsageInfos.add(appUsageInfo);
                         }
                         appRelatedEvents.add(currentEvent);

@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,8 +83,8 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
@@ -126,8 +125,8 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
@@ -167,8 +166,8 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
@@ -207,8 +206,8 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
@@ -247,8 +246,8 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
@@ -288,8 +287,8 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, endTime.getTimeInMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
@@ -321,8 +320,8 @@ public class CalendarViewFragment extends Fragment {
                     startTime.set(Calendar.MILLISECOND, 0);
 
                     Bundle bundle = new Bundle();
-                    bundle.putLong(MakeMeZenConstants.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
-                    bundle.putLong(MakeMeZenConstants.END_DATE_MILLISECONDS, System.currentTimeMillis());
+                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
+                    bundle.putLong(MakeMeZenUtil.END_DATE_MILLISECONDS, System.currentTimeMillis());
                     AppUsageListFragment appUsageListFragment = new AppUsageListFragment();
                     appUsageListFragment.setArguments(bundle);
 
