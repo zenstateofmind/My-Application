@@ -86,9 +86,8 @@ public class AppUsageListFragment extends Fragment {
 
         Drawable currentDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
 
-        if (currentDayBackground == getResources().getDrawable(R.drawable.calendar_curved_orange, null) ) {
             setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-        }
+//        }
 
 //        if (this.getArguments() == null) {
 //            if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
