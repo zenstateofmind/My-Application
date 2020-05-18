@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -83,7 +84,9 @@ public class AppUsageListFragment extends Fragment {
 
         Calendar c = getTodayStartTimeCal();
 
-        if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
+        Drawable currentDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
+
+        if (currentDayBackground == getResources().getDrawable(R.drawable.calendar_curved_orange, null) ) {
             setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
         }
 
