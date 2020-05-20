@@ -44,13 +44,27 @@ public class EnableAccessFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        mHandler = new Handler();
+        mStatusChecker.run();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        mHandler = new Handler();
-        mStatusChecker.run();
+
+        if (accessAllowed()) {
+            goToNextScreen();
+        } else {
+            mHandler = new Handler();
+            mStatusChecker.run();
+        }
+
     }
 
     @Override
@@ -69,22 +83,28 @@ public class EnableAccessFragment extends Fragment {
                     mHandler.postDelayed(mStatusChecker, mInterval);
                     Log.i(TAG, "We will continue to go down the route of checking");
                 } else {
-                    Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
-                            "from here");
-                    if (goToNotifEducation) {
-                        kickStartAlarmManager();
-                        Intent intent = new Intent(getActivity(), NotificationEducation.class);
-                        startActivity(intent);
-                    } else {
-                        goToNotifEducation = false;
-                        Intent intent = new Intent(getActivity(), HomeScreen.class);
-                        startActivity(intent);
-
-                    }
+                    goToNextScreen();
                 }
             }
         }
     };
+
+    private void goToNextScreen() {
+        Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
+                "from here");
+        if (goToNotifEducation) {
+            kickStartAlarmManager();
+            Intent intent = new Intent(getActivity(), NotificationEducation.class);
+            startActivity(intent);
+//                        getActivity().finish();
+        } else {
+            goToNotifEducation = false;
+            Intent intent = new Intent(getActivity(), HomeScreen.class);
+            startActivity(intent);
+//                        getActivity().finish();
+
+        }
+    }
 
     /**
      * Three types of notifications:
@@ -148,6 +168,7 @@ public class EnableAccessFragment extends Fragment {
 
                         Intent intent = new Intent(getActivity(), NotificationEducation.class);
                         startActivity(intent);
+//                        getActivity().finish();
 
                     }
                 }

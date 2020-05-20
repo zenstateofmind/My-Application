@@ -12,6 +12,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -301,8 +302,27 @@ public class AppUsageListFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<AppUsageInfo> appUsageInfos) {
             super.onPostExecute(appUsageInfos);
-            if (getView() != null) {
+            if (getView() != null && getFragmentManager() != null && getResources() != null) {
+
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_orange));
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.first_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.second_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.third_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.fourth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.fifth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.sixth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 setUpTimeSpentRecycleView(getView(), appUsageInfos);
+
+//                Drawable seventhDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
+//
+//                //TODO: HORRIBLE WAY OF WRITING CODE, PLEASE TRY TO FIND ANOTHER ALTERNATIVE HERE
+//                if (R.drawable.calendar_curved_orange == getResources().getIdentifier("calendar_curved_orange", "drawable", getActivity().getPackageName())) {
+//                    setUpTimeSpentRecycleView(getView(), appUsageInfos);
+//                }
+//                if (seventhDayBackground == getResources().getDrawable(R.drawable.calendar_curved_orange, null)) {
+//                    setUpTimeSpentRecycleView(getView(), appUsageInfos);
+//                }
+
             }
 
         }

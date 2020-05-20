@@ -55,7 +55,9 @@ public class MakeMeZenUtil {
         ArrayList<AppUsageInfo> appUsageInfos = new ArrayList<AppUsageInfo>();
         for (String appUsageInfoObject : appUsageInfoObjectList) {
             AppUsageInfo appUsageInfo = getAppUsageInfoObject(appUsageInfoObject, context);
-            appUsageInfos.add(appUsageInfo);
+            if (appUsageInfo != null) {
+                appUsageInfos.add(appUsageInfo);
+            }
         }
         return appUsageInfos;
     }
@@ -81,10 +83,9 @@ public class MakeMeZenUtil {
 
             return appUsageInfo;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            return null;
         }
 
-        return null;
 
     }
 }
