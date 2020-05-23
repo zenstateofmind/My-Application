@@ -1,5 +1,6 @@
 package com.timeto.makemezen;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -7,6 +8,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 
@@ -46,7 +48,6 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
         Amplitude.getInstance().logEvent("Notify the user");
 
-        TimeSpentEngine engine = new TimeSpentEngine(context);
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
@@ -54,76 +55,103 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
 
-        ArrayList<AppUsageInfo> appUsageInfos = engine.getTimeSpent(c.getTimeInMillis(), System.currentTimeMillis());
-        ArrayList<String> overusedApps = overusedApps(context, overuseMinutes, appUsageInfos);
-        int totalTimeSpent = 0;
-        String notifText = "";
+        if (!dailyNotifSent(c.getTimeInMillis(), context)) {
 
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            TimeSpentEngine engine = new TimeSpentEngine(context);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            CharSequence name = "phone_usage_reminders";
-            String description = "Send you reminders of how often you use your phone";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
+            ArrayList<AppUsageInfo> appUsageInfos = engine.getTimeSpent(c.getTimeInMillis(), System.currentTimeMillis());
+            ArrayList<String> overusedApps = overusedApps(context, overuseMinutes, appUsageInfos);
+            int totalTimeSpent = 0;
+            String notifText = "";
 
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            notificationManager.createNotificationChannel(channel);
+            NotificationManager notificationManager =
+                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-        if (overusedApps.size() > 0) {
-            String overUsedAppStringified = Arrays.toString(overusedApps.toArray()).replace("[", "").replace("]", "");
+                CharSequence name = "phone_usage_reminders";
+                String description = "Send you reminders of how often you use your phone";
+                int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+                channel.setDescription(description);
 
-             notifText = "You have spent more than an hour on " + overUsedAppStringified + " today.";
+                // Register the channel with the system; you can't change the importance
+                // or other notification behaviors after this
+                notificationManager.createNotificationChannel(channel);
 
-            Amplitude.getInstance().logEvent("More than an hour on an app");
-
-        } else {
-
-            for(AppUsageInfo appUsageInfo: appUsageInfos) {
-                totalTimeSpent += appUsageInfo.getTimeSpentInMilliseconds();
             }
 
-            totalTimeSpent =  (int) TimeUnit.MILLISECONDS.toMinutes(totalTimeSpent);
+            if (overusedApps.size() > 0) {
+                String overUsedAppStringified = Arrays.toString(overusedApps.toArray()).replace("[", "").replace("]", "");
 
-            int hours = totalTimeSpent / 60;
-            int mins = totalTimeSpent % 60;
+                notifText = "You have spent more than an hour on " + overUsedAppStringified + " today.";
 
-            if (hours == 0) {
-                notifText = "You have spent " + mins + " minutes on your phone today. Learn more!";
-            } else if (hours == 1) {
-                notifText = "You have spent " + hours + " hour and " + mins + " mins on your phone today. Learn more!";
+                Amplitude.getInstance().logEvent("More than an hour on an app");
+
             } else {
-                notifText = "You have spent " + hours + " hours and " + mins + " mins on your phone today. Learn more!";
+
+                for (AppUsageInfo appUsageInfo : appUsageInfos) {
+                    totalTimeSpent += appUsageInfo.getTimeSpentInMilliseconds();
+                }
+
+                totalTimeSpent = (int) TimeUnit.MILLISECONDS.toMinutes(totalTimeSpent);
+
+                int hours = totalTimeSpent / 60;
+                int mins = totalTimeSpent % 60;
+
+                if (hours == 0) {
+                    notifText = "You have spent " + mins + " minutes on your phone today. Learn more!";
+                } else if (hours == 1) {
+                    notifText = "You have spent " + hours + " hour and " + mins + " mins on your phone today. Learn more!";
+                } else {
+                    notifText = "You have spent " + hours + " hours and " + mins + " mins on your phone today. Learn more!";
+                }
+
+                Amplitude.getInstance().logEvent("Less than an hour on an app");
             }
 
-            Amplitude.getInstance().logEvent("Less than an hour on an app");
+            Intent homeScreenLaunchIntent = new Intent(context, HomeScreen.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, homeScreenLaunchIntent, 0);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                    .setSmallIcon(R.drawable.vector_drawable_group102)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.mipmap.ic_launcher_round))
+                    .setContentTitle("Usage Report")
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(notifText))
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            Notification dailyNotification = builder.build();
+
+            notificationManager.notify(getID(), dailyNotification);
+
+            updateNotifSentInSharedPreferences(c.getTimeInMillis(), context);
+
+            Amplitude.getInstance().logEvent("Notification sent");
         }
 
-        Intent homeScreenLaunchIntent = new Intent(context, HomeScreen.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, homeScreenLaunchIntent, 0);
+    }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.vector_drawable_group102)
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                        R.mipmap.ic_launcher_round))
-                .setContentTitle("Usage Report")
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(notifText))
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    private void updateNotifSentInSharedPreferences(long timeInMillis, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.file_key), Context.MODE_PRIVATE);
+        String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.DAILY_NOTIF_KEY, "");
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(MakeMeZenUtil.DAILY_NOTIF_KEY, dataForTheDay + MakeMeZenUtil.DIVIDER + timeInMillis);
+        editor.apply();
 
-        Notification dailyNotification = builder.build();
+    }
 
-        notificationManager.notify(getID(), dailyNotification);
-        Amplitude.getInstance().logEvent("Notification sent");
-
+    private boolean dailyNotifSent(long timeInMillis, Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.file_key), Context.MODE_PRIVATE);
+        String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.DAILY_NOTIF_KEY, "");
+        if (!dataForTheDay.equals("") && dataForTheDay.contains(timeInMillis + "")) {
+            return true;
+        }
+        return false;
     }
 
     public static int getID() {

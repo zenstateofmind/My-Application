@@ -14,7 +14,8 @@ public class MakeMeZenUtil {
 
     public static final String START_DATE_MILLISECONDS = "start_date_milliseconds";
     public static final String END_DATE_MILLISECONDS = "end_date_milliseconds";
-    private static final String DIVIDER = "&&&";
+    public static final String DAILY_NOTIF_KEY = "daily_notification";
+    public static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
     private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_TODAYS_DATA";
 

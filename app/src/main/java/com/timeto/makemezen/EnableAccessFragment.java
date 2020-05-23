@@ -93,7 +93,7 @@ public class EnableAccessFragment extends Fragment {
         Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
                 "from here");
         if (goToNotifEducation) {
-            kickStartAlarmManager();
+//            kickStartAlarmManager();
             Intent intent = new Intent(getActivity(), NotificationEducation.class);
             startActivity(intent);
 //                        getActivity().finish();
@@ -106,31 +106,7 @@ public class EnableAccessFragment extends Fragment {
         }
     }
 
-    /**
-     * Three types of notifications:
-     * 1. Week end review - how many hours of the app used over the entire week
-     * 2. Morning review - Encouragement push
-     *                      If hours spent yesterday than the day before, praise!
-     *                      TODO: This will be added after we enable features to show time spent across different days
-     * 3. Evening push - If any app has more than > x hours -> call that out. Else total amount of
-     *                  time spent on the app so far.
-     */
-    private void kickStartAlarmManager() {
 
-        // Set the alarm to start at approximately 2:00 p.m.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 20);
-        calendar.set(Calendar.MINUTE, 00);
-
-        alarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getContext(), AppUsageReviewNotifReceiver.class);
-        alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
-
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent);
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
