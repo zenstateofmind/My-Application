@@ -14,17 +14,42 @@ public class MakeMeZenUtil {
 
     public static final String START_DATE_MILLISECONDS = "start_date_milliseconds";
     public static final String END_DATE_MILLISECONDS = "end_date_milliseconds";
-    public static final String DAILY_NOTIF_KEY = "daily_notification";
+
+    public static final String MILESTONE_PHONE_USAGE_ONE = "phone_usage_milestone_1";
+    public static final String MILESTONE_PHONE_USAGE_TWO = "phone_usage_milestone_2";
+    public static final String MILESTONE_PHONE_USAGE_THREE = "phone_usage_milestone_3";
+    public static final String MILESTONE_PHONE_USAGE_FOUR = "phone_usage_milestone_4";
+
+
+    public static final String MILESTONE_APP_USAGE_ONE = "app_usage_milestone_1";
+    public static final String MILESTONE_APP_USAGE_TWO = "app_usage_milestone_2";
+    public static final String MILESTONE_APP_USAGE_THREE = "app_usage_milestone_3";
+    public static final String MILESTONE_APP_USAGE_FOUR = "app_usage_milestone_4";
+
+    private static final String DAILY_NOTIF_PHONE_USAGE_KEY = "daily_notification_phone_usage";
+    private static final String DAILY_NOTIF_APP_USAGE_KEY = "daily_notification_phone_usage";
     public static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
-    private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_TODAYS_DATA";
+    private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_DATA";
 
     public static String createKey(Long startDate) {
         return startDate + "";
     }
 
-    public static String lastUpdateKey() {
-        return LAST_UPDATE_KEY;
+    public static String createDailyPhoneUsageKey(Long todayInMillis) {
+        return todayInMillis + DAILY_NOTIF_PHONE_USAGE_KEY;
+    }
+
+    public static String createDailyAppUsageKey(Long todayInMillis) {
+        return todayInMillis + DAILY_NOTIF_APP_USAGE_KEY;
+    }
+
+    public static String getAppUsageValue(String appName, String milestone) {
+        return appName + milestone;
+    }
+
+    public static String lastUpdateKey(Long dateInMilli) {
+        return dateInMilli + LAST_UPDATE_KEY;
     }
 
     public static String lastUpdateTodayData(Long lastDate) {
