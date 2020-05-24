@@ -40,6 +40,8 @@ public class TimeSpentEngine {
 
         UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
         ArrayList<AppUsageInfo> appUsageInfos = getTimeWithUsageEvents(usageStatsManager, startTime, endTime);
+//        ArrayList<AppUsageInfo> appUsageInfos = new ArrayList<>();
+//
         return appUsageInfos;
     }
 

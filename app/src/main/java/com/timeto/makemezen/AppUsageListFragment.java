@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import android.view.WindowManager;
 
 import com.amplitude.api.Amplitude;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -231,7 +229,7 @@ public class AppUsageListFragment extends Fragment {
         startTimeForData = c.getTimeInMillis();
         endTimeForData = System.currentTimeMillis();
 
-        if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
+        if (dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
             setupDataAndView(appUsageListFragmentView, c.getTimeInMillis(), System.currentTimeMillis());
         }
 
@@ -282,7 +280,7 @@ public class AppUsageListFragment extends Fragment {
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
             if (startTimeForData == getTodayStartTimeCal().getTimeInMillis() &&
-                    lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
+                    dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
 
                 new UpdateTodaysDataUsageTask().execute(startTimeForData, endTimeForData);
 //                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
@@ -301,15 +299,17 @@ public class AppUsageListFragment extends Fragment {
             TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
             timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
 
-            String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
-            String key = MakeMeZenUtil.createKey(startTimeForData);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(key, appUsageInfoObjectsString);
+            if (!timeSpentPerApp.isEmpty()) {
 
+                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
+                String key = MakeMeZenUtil.createKey(startTimeForData);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(key, appUsageInfoObjectsString);
 
-            editor.putString(MakeMeZenUtil.lastUpdateKey(startTimeForData), System.currentTimeMillis()+"");
+                editor.putString(MakeMeZenUtil.lastUpdateKey(startTimeForData), System.currentTimeMillis() + "");
 
-            editor.commit();
+                editor.commit();
+            }
 
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
         }
@@ -362,7 +362,7 @@ public class AppUsageListFragment extends Fragment {
         return false;
     }
 
-    private boolean lastUpdateTimeForTodaysDataGreaterThan(Long currentTimeInMilli, Long delta) {
+    private boolean dataUpdatedNeeded(Long currentTimeInMilli, Long delta) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
         Long lastSavedTimeForTodaysData = Long.parseLong(sharedPreferences.getString(MakeMeZenUtil.lastUpdateKey(getTodayStartTimeCal().getTimeInMillis()), "0"));
 
