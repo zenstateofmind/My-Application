@@ -17,12 +17,11 @@ import androidx.core.app.NotificationCompat;
 import com.amplitude.api.Amplitude;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
+public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
 
     /**
      * Goal: Notify the user of the apps that have been used for a long time.
@@ -38,7 +37,7 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
     public static String CHANNEL_ID = "APP_REMINDER_ID";
     public static String NOTIFICATION_ID = "notification-id";
     public static Long overuseMinutes = 120L;
-    private final static AtomicInteger c = new AtomicInteger(0);
+    private final static AtomicInteger atomic_int_counter = new AtomicInteger(0);
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -69,13 +68,13 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
 
         createAndSendNotif(context, intent, notificationManager);
 
-
     }
 
     private void buildAndSendNotif(Context context, Intent intent, String notifText, NotificationManager notificationManager) {
         Intent homeScreenLaunchIntent = new Intent(context, HomeScreen.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, homeScreenLaunchIntent, 0);
+        int requestCode = (int)System.currentTimeMillis();
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, homeScreenLaunchIntent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.vector_drawable_group102)
@@ -114,7 +113,7 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
         int minsSpent = (int) TimeUnit.MILLISECONDS.toMinutes(totalTimeSpent);
         int hoursSpent = minsSpent / 60;
 
-        if (hoursSpent >= 1 && hoursSpent < 4) {
+        if (hoursSpent >= 2 && hoursSpent < 4) {
             if (!dailyNotifPhoneUsageSent(today.getTimeInMillis(), MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE, context)) {
                 notifText = "You have spent more than " + hoursSpent + " hours on your phone today. Learn more!";
                 buildAndSendNotif(context, intent, notifText, notificationManager);
@@ -233,7 +232,7 @@ public class AppUsageReviewNotifReceiver extends BroadcastReceiver {
     }
 
     public static int getID() {
-        return c.incrementAndGet();
+        return atomic_int_counter.incrementAndGet();
     }
 
     // Create a method that returns apps that you have spent more than an x mins during the day (till now).

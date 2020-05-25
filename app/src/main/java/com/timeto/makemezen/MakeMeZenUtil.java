@@ -31,6 +31,7 @@ public class MakeMeZenUtil {
     public static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
     private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_DATA";
+    private static final String MOTIVATION_KEY = "motivation_key";
 
     public static String createKey(Long startDate) {
         return startDate + "";
@@ -38,6 +39,10 @@ public class MakeMeZenUtil {
 
     public static String createDailyPhoneUsageKey(Long todayInMillis) {
         return todayInMillis + DAILY_NOTIF_PHONE_USAGE_KEY;
+    }
+
+    public static String getMotivationKey() {
+        return MOTIVATION_KEY;
     }
 
     public static String createDailyAppUsageKey(Long todayInMillis) {

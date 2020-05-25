@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.timeto.makemezen.AppUsageReviewNotifReceiver" />
+        <receiver android:name="com.timeto.makemezen.DailyAppUsageReviewNotifReceiver" />
+        <receiver android:name="com.timeto.makemezen.MorningMotivationNotifReceiver" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
