@@ -22,6 +22,7 @@
 
         <receiver android:name="com.timeto.makemezen.DailyAppUsageReviewNotifReceiver" />
         <receiver android:name="com.timeto.makemezen.MorningMotivationNotifReceiver" />
+        <receiver android:name="com.timeto.makemezen.WeeklyUsageReviewNotifReceiver" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission

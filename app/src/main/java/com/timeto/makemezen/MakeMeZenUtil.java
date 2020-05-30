@@ -20,11 +20,21 @@ public class MakeMeZenUtil {
     public static final String MILESTONE_PHONE_USAGE_THREE = "phone_usage_milestone_3";
     public static final String MILESTONE_PHONE_USAGE_FOUR = "phone_usage_milestone_4";
 
+    public static final int MILESTONE_PHONE_USAGE_ONE_TIME  = 2;
+    public static final int MILESTONE_PHONE_USAGE_TWO_TIME = 4;
+    public static final int MILESTONE_PHONE_USAGE_THREE_TIME = 6;
+    public static final int MILESTONE_PHONE_USAGE_FOUR_TIME = 8;
+
 
     public static final String MILESTONE_APP_USAGE_ONE = "app_usage_milestone_1";
     public static final String MILESTONE_APP_USAGE_TWO = "app_usage_milestone_2";
     public static final String MILESTONE_APP_USAGE_THREE = "app_usage_milestone_3";
     public static final String MILESTONE_APP_USAGE_FOUR = "app_usage_milestone_4";
+
+    public static final int MILESTONE_APP_USAGE_ONE_TIME = 2;
+    public static final int MILESTONE_APP_USAGE_TWO_TIME = 4;
+    public static final int MILESTONE_APP_USAGE_THREE_TIME = 6;
+    public static final int MILESTONE_APP_USAGE_FOUR_TIME = 8;
 
     private static final String DAILY_NOTIF_PHONE_USAGE_KEY = "daily_notification_phone_usage";
     private static final String DAILY_NOTIF_APP_USAGE_KEY = "daily_notification_phone_usage";
@@ -32,6 +42,8 @@ public class MakeMeZenUtil {
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
     private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_DATA";
     private static final String MOTIVATION_KEY = "motivation_key";
+
+    public static Long APP_OVERUSE_MINUTES = 120L;
 
     public static String createKey(Long startDate) {
         return startDate + "";

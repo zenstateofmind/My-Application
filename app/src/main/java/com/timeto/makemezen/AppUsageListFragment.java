@@ -201,6 +201,18 @@ public class AppUsageListFragment extends Fragment {
         alarmManager7.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday7.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent7);
 
+        Calendar notifWeekend = Calendar.getInstance();
+        notifWeekend.setTimeInMillis(System.currentTimeMillis());
+        notifWeekend.set(Calendar.HOUR_OF_DAY, 13);
+        notifWeekend.set(Calendar.MINUTE, 00);
+
+        AlarmManager alarmManager8 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent8 = new Intent(getContext(), WeeklyUsageReviewNotifReceiver.class);
+        int id8 = (int)System.currentTimeMillis() + 1231;
+        PendingIntent alarmIntent8 = PendingIntent.getBroadcast(getContext(), id8, intent8, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager8.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekend.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent8);
+
 
     }
 
@@ -283,7 +295,7 @@ public class AppUsageListFragment extends Fragment {
             if (startTimeForData == getTodayStartTimeCal().getTimeInMillis() &&
                     dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
 
-                new UpdateTodaysDataUsageTask().execute(startTimeForData, endTimeForData);
+                new UpdateTodayDataUsageTask().execute(startTimeForData, endTimeForData);
 //                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
 //                timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
 //
@@ -312,11 +324,142 @@ public class AppUsageListFragment extends Fragment {
                 editor.commit();
             }
 
+            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+                updateDataForNotifs(startTimeForData, timeSpentPerApp);
+            }
+
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
         }
 
     }
 
+    // 1 - check if time spent is greater than a milestone:
+    //     if so - see if notification has already been sent for the mileston
+    //     if not - update the db to say notification has been sent -> since the user has already seen it
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void updateDataForNotifs(Long startDateInMilli, ArrayList<AppUsageInfo> appUsageInfoTuples) {
+
+        int totalTimeSpent = 0;
+
+        for (AppUsageInfo appUsageInfo : appUsageInfoTuples) {
+            totalTimeSpent += appUsageInfo.getTimeSpentInMilliseconds();
+        }
+        int minsSpent = (int) TimeUnit.MILLISECONDS.toMinutes(totalTimeSpent);
+        int hoursSpent = minsSpent / 60;
+
+        if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE_TIME &&
+                hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME) {
+            if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE)) {
+                updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE);
+                return;
+            }
+        } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME &&
+                hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME) {
+            if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO )) {
+                updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO);
+                return;
+            }
+
+        } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME &&
+                hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME) {
+            if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE)) {
+                updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE);
+                return;
+            }
+        } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME) {
+            if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR)) {
+                updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR);
+                return;
+            }
+        }
+
+        ArrayList<AppUsageInfo> overusedApps = overusedApps(MakeMeZenUtil.APP_OVERUSE_MINUTES, appUsageInfoTuples);
+
+        if (overusedApps.size() > 0) {
+            for (AppUsageInfo overUsedApp : overusedApps) {
+
+                int hoursSpentOnApp = (int) (overUsedApp.getTimeSpentInMinutes()/60);
+                if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_ONE_TIME &&
+                        hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME) {
+                    if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_ONE)) {
+                        updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_ONE);
+                        return;
+                    }
+                } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME &&
+                        hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME) {
+                    if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_TWO)) {
+                        updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_TWO);
+                        return;
+                    }
+
+                } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME &&
+                        hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME) {
+                    if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_THREE)) {
+                        updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_THREE);
+                        return;
+                    }
+
+                } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME) {
+                    if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR)) {
+                        updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR);
+                        return;
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    // Create a method that returns apps that you have spent more than an x mins during the day (till now).
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public ArrayList<AppUsageInfo> overusedApps(Long minMInutes, ArrayList<AppUsageInfo> appUsageInfos) {
+
+        ArrayList<AppUsageInfo> overusedApps = new ArrayList<>();
+        for (AppUsageInfo appUsageInfo: appUsageInfos) {
+            if (appUsageInfo.getTimeSpentInMinutes() >= minMInutes) {
+                overusedApps.add(appUsageInfo);
+            }
+        }
+        return overusedApps;
+    }
+
+    private void updateAppUsageDataInSharedPreferences(long timeInMillis, String appName, String milestone) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.file_key), Context.MODE_PRIVATE);
+        String key = MakeMeZenUtil.createDailyAppUsageKey(timeInMillis);
+        String dataForTheDay = sharedPreferences.getString(key, "");
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, dataForTheDay + MakeMeZenUtil.DIVIDER + MakeMeZenUtil.getAppUsageValue(appName, milestone));
+        editor.apply();
+    }
+
+    private boolean dailyNotifAppUsageSent(long todayInMilli, String appName, String milestone) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.file_key), Context.MODE_PRIVATE);
+        String appUsageMilestones = sharedPreferences.getString(MakeMeZenUtil.createDailyAppUsageKey(todayInMilli), "");
+        String expectedValue = MakeMeZenUtil.getAppUsageValue(appName, milestone);
+        if (!appUsageMilestones.equals("") && appUsageMilestones.contains(expectedValue)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean dailyNotifPhoneUsageSent(long startDateInMillis, String milestone) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.file_key), Context.MODE_PRIVATE);
+        String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createDailyPhoneUsageKey(startDateInMillis), "");
+        if (!dataForTheDay.equals("") && dataForTheDay.contains(milestone)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void updatePhoneUsageDataInSharedPreferences(long timeInMillis, String milestone) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(getContext().getString(R.string.file_key), Context.MODE_PRIVATE);
+        String key = MakeMeZenUtil.createDailyPhoneUsageKey(timeInMillis);
+        String dataForTheDay = sharedPreferences.getString(key, "");
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, dataForTheDay + MakeMeZenUtil.DIVIDER + milestone);
+        editor.apply();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void setUpTimeSpentRecycleView(View appUsageListFragmentView, ArrayList<AppUsageInfo> timeSpentPerApp) {
@@ -335,6 +478,7 @@ public class AppUsageListFragment extends Fragment {
         adapter = new AppUsageAdapter(timeSpentPerApp, getResources(), (int)pxWidth);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
 
     }
 
@@ -385,7 +529,7 @@ public class AppUsageListFragment extends Fragment {
         setupDataAndView(getView(), startTime, endTime);
     }
 
-    private class UpdateTodaysDataUsageTask extends AsyncTask<Long, Void, ArrayList<AppUsageInfo>> {
+    private class UpdateTodayDataUsageTask extends AsyncTask<Long, Void, ArrayList<AppUsageInfo>> {
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
@@ -427,6 +571,7 @@ public class AppUsageListFragment extends Fragment {
                 getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.sixth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 setUpTimeSpentRecycleView(getView(), appUsageInfos);
 
+                updateDataForNotifs(getTodayStartTimeCal().getTimeInMillis(), appUsageInfos);
 //                Drawable seventhDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
 //
 //                //TODO: HORRIBLE WAY OF WRITING CODE, PLEASE TRY TO FIND ANOTHER ALTERNATIVE HERE
