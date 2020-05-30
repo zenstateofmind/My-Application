@@ -123,7 +123,7 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager1 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent1 = new Intent(getContext(), MorningMotivationNotifReceiver.class);
         int id1 = (int)System.currentTimeMillis() + 9;
-        PendingIntent alarmIntent1 = PendingIntent.getBroadcast(getContext(), id1 , intent1, 0);
+        PendingIntent alarmIntent1 = PendingIntent.getBroadcast(getContext(), id1 , intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmManager1.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday1.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent1);
@@ -136,7 +136,7 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager2 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent2 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id2 = (int)System.currentTimeMillis() + 11;
-        PendingIntent alarmIntent2 = PendingIntent.getBroadcast(getContext(), id2, intent2, 0);
+        PendingIntent alarmIntent2 = PendingIntent.getBroadcast(getContext(), id2, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager2.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday2.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent2);
 
@@ -148,7 +148,7 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager3 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent3 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id3 = (int)System.currentTimeMillis() + 13;
-        PendingIntent alarmIntent3 = PendingIntent.getBroadcast(getContext(), id3, intent3, 0);
+        PendingIntent alarmIntent3 = PendingIntent.getBroadcast(getContext(), id3, intent3, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager3.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday3.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent3);
 
@@ -160,7 +160,7 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager4 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent4 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id4 = (int)System.currentTimeMillis() + 15;
-        PendingIntent alarmIntent4 = PendingIntent.getBroadcast(getContext(), id4, intent4, 0);
+        PendingIntent alarmIntent4 = PendingIntent.getBroadcast(getContext(), id4, intent4, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager4.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday4.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent4);
 
@@ -172,9 +172,10 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager5 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent5 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id5 = (int)System.currentTimeMillis() + 17;
-        PendingIntent alarmIntent5 = PendingIntent.getBroadcast(getContext(), id5, intent5, 0);
+        PendingIntent alarmIntent5 = PendingIntent.getBroadcast(getContext(), id5, intent5, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager5.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday5.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent5);
+//        alarmManager5.set
 
         Calendar notifWeekday6 = Calendar.getInstance();
         notifWeekday6.setTimeInMillis(System.currentTimeMillis());
@@ -184,7 +185,7 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager6 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent6 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id6 = (int)System.currentTimeMillis() + 19;
-        PendingIntent alarmIntent6 = PendingIntent.getBroadcast(getContext(), id6, intent6, 0);
+        PendingIntent alarmIntent6 = PendingIntent.getBroadcast(getContext(), id6, intent6, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager6.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday6.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent6);
 
@@ -196,7 +197,7 @@ public class AppUsageListFragment extends Fragment {
         AlarmManager alarmManager7 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent7 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id7 = (int)System.currentTimeMillis() + 21;
-        PendingIntent alarmIntent7 = PendingIntent.getBroadcast(getContext(), id7, intent7, 0);
+        PendingIntent alarmIntent7 = PendingIntent.getBroadcast(getContext(), id7, intent7, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager7.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday7.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent7);
 

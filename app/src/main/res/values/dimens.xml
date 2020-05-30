@@ -15,8 +15,10 @@
 
     <!--  ///////////////////////// -->
     <!-- hero_single_app_usage_info.xml -->
+    <dimen name="hero_margin_top">20dp</dimen>
     <dimen name="screen_time_margin">100dp</dimen>
     <dimen name="progress_bar_base">170dp</dimen>
+    <dimen name="time_spent_text">20dp</dimen>
 
 
     <!--  ///////////////////////// -->
@@ -35,5 +37,9 @@
     <!-- activity_home_screen.xml -->
     <dimen name="activity_home_screen_title">20sp</dimen>
     <dimen name="activity_home_screen_title_height">60dp</dimen>
+
+    <!--  ///////////////////////// -->
+    <!-- calendar -->
+    <dimen name="calendar_text">10dp</dimen>
 
 </resources>
