@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
@@ -54,7 +55,7 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createAndSendNotif(Context context, Intent intent, NotificationManager notificationManager) {
 
-        if (todayIsSunday()) {
+        if (todayIsSunday() && !weeklyUsageNotifSent(context)) {
 
             Long weeklyTimeSpentInMilli = 0L;
             for (int startDay = -6; startDay < 1; startDay++) {
@@ -96,11 +97,31 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
             if (weeklyTimeSpentInMins > 0 ) {
                 String notifText = "You spent " + hoursSpent + " hours " + minsSpent + " mins on your phone this past week";
                 buildAndSendNotif(context, intent, notifText, notificationManager);
+                updateWeeklyUsageNotifInfo(context);
             }
 
         }
 
     }
+
+    private boolean weeklyUsageNotifSent(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.file_key), Context.MODE_PRIVATE);
+        String weeklyNotifSent = sharedPreferences.getString(MakeMeZenUtil.getWeeklyUsageNotifKey(), "");
+
+        if (!weeklyNotifSent.equals("") && weeklyNotifSent.contains(getTodayStartTime()+"")) {
+            return true;
+        }
+        return false;
+    }
+
+    private void updateWeeklyUsageNotifInfo(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.file_key), Context.MODE_PRIVATE);
+        String weeklyNotifSent = sharedPreferences.getString(MakeMeZenUtil.getWeeklyUsageNotifKey(), "");
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(MakeMeZenUtil.getWeeklyUsageNotifKey(), weeklyNotifSent + MakeMeZenUtil.DIVIDER + getTodayStartTime());
+        editor.apply();
+    }
+
 
     private void buildAndSendNotif(Context context, Intent intent, String notifText, NotificationManager notificationManager) {
         Intent homeScreenLaunchIntent = new Intent(context, HomeScreen.class);
@@ -112,7 +133,7 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
                 .setSmallIcon(R.drawable.vector_drawable_group102)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.mipmap.ic_launcher_round))
-                .setContentTitle("Usage Report")
+                .setContentTitle("Weekly Usage Report")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(notifText))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -121,6 +142,8 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
         Notification dailyNotification = builder.build();
 
         notificationManager.notify(getID(), dailyNotification);
+
+
     }
 
     public static int getID() {
@@ -131,5 +154,14 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         return (dayOfWeek == Calendar.SUNDAY);
+    }
+
+    private Long getTodayStartTime() {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+        return c.getTimeInMillis();
     }
 }

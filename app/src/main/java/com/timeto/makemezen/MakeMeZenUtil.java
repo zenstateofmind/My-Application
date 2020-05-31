@@ -38,6 +38,7 @@ public class MakeMeZenUtil {
 
     private static final String DAILY_NOTIF_PHONE_USAGE_KEY = "daily_notification_phone_usage";
     private static final String DAILY_NOTIF_APP_USAGE_KEY = "daily_notification_phone_usage";
+    private static final String WEEKLY_NOTIF_USAGE_KEY = "weekly_notif_usage";
     public static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";
     private static final String LAST_UPDATE_KEY = "LAST_UPDATED_DATE_DATA";
@@ -51,6 +52,10 @@ public class MakeMeZenUtil {
 
     public static String createDailyPhoneUsageKey(Long todayInMillis) {
         return todayInMillis + DAILY_NOTIF_PHONE_USAGE_KEY;
+    }
+
+    public static String getWeeklyUsageNotifKey() {
+        return WEEKLY_NOTIF_USAGE_KEY;
     }
 
     public static String getMotivationKey() {

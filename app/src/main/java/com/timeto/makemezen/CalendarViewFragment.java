@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 
 /**
@@ -24,6 +25,7 @@ import java.util.Calendar;
 public class CalendarViewFragment extends Fragment {
 
     private static final String TAG = CalendarViewFragment.class.getSimpleName();
+    private ArrayList<String> daysOfTheWeekRepo = new ArrayList<>();
 
     public CalendarViewFragment() {
     }
@@ -57,6 +59,8 @@ public class CalendarViewFragment extends Fragment {
         final LinearLayout sixthDayLayout = calendarViewFragment.findViewById(R.id.sixth_day);
         final LinearLayout seventhDayLayout = calendarViewFragment.findViewById(R.id.seventh_day);
 
+        final TextView dayOfTheWeekView = calendarViewFragment.findViewById(R.id.calendar_day);
+
         firstDayLayout.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -70,6 +74,9 @@ public class CalendarViewFragment extends Fragment {
                 fifthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 seventhDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(0));
+
                 if (firstDayCurrBackground != firstDayOriginalBackground) {
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -6);
@@ -86,7 +93,7 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -116,6 +123,8 @@ public class CalendarViewFragment extends Fragment {
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 seventhDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
 
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(1));
+
                 if (secondDayOriginalBackground != secondDayCurrBackground) {
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -5);
@@ -132,7 +141,7 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -148,6 +157,7 @@ public class CalendarViewFragment extends Fragment {
         });
 
         thirdDayLayout.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Drawable thirdDayOriginalBackground = thirdDayLayout.getBackground();
@@ -159,6 +169,8 @@ public class CalendarViewFragment extends Fragment {
                 fifthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 seventhDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(2));
 
                 if (thirdDayOriginalBackground != thirdDayCurrBackground) {
                     Calendar startTime = Calendar.getInstance();
@@ -176,7 +188,7 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -204,6 +216,9 @@ public class CalendarViewFragment extends Fragment {
                 fifthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 seventhDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(3));
+
                 if (fourthDayOriginalBackground != fourthDayCurrBackground) {
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -3);
@@ -220,7 +235,7 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -248,6 +263,9 @@ public class CalendarViewFragment extends Fragment {
                 thirdDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 seventhDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(4));
+
                 if (fifthDayOriginalBackground != fifthDayCurrBackground) {
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -2);
@@ -264,7 +282,7 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -293,6 +311,8 @@ public class CalendarViewFragment extends Fragment {
                 thirdDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 seventhDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
 
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(5));
+
                 if (sixthDayCurrBackground != sixthDayOriginalBackground) {
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -1);
@@ -309,7 +329,7 @@ public class CalendarViewFragment extends Fragment {
                     endTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -337,6 +357,9 @@ public class CalendarViewFragment extends Fragment {
                 fifthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
                 thirdDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+
+                dayOfTheWeekView.setText(daysOfTheWeekRepo.get(6));
+
                 if (seventhDayCurrBackground != seventhDayOriginalBackground) {
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, 0);
@@ -346,7 +369,7 @@ public class CalendarViewFragment extends Fragment {
                     startTime.set(Calendar.MILLISECOND, 0);
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
-                    appUsageFragment.testUpdateData(startTime.getTimeInMillis(), System.currentTimeMillis());
+                    appUsageFragment.updateData(startTime.getTimeInMillis(), System.currentTimeMillis());
 
 
 //                    Bundle bundle = new Bundle();
@@ -376,72 +399,79 @@ public class CalendarViewFragment extends Fragment {
         //6 days ago
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.first_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.first_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
 
         //5 days ago
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.second_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.second_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
 
         //4 days ago
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.third_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.third_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
 
         //3 days ago
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.fourth_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.fourth_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()));
 
         //2 days ago
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.fifth_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.fifth_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add("Day Before");
 
         //1 day ago
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.sixth_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.sixth_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add("Yesterday");
 
         //Today
         cal.add(Calendar.DAY_OF_YEAR, 1);
         dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
-        dayOfWeek = getDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
+        dayOfWeek = getDayOfWeekForCalendarView(cal.get(Calendar.DAY_OF_WEEK));
 
         dayOfWeekView = (TextView) calendarViewFragment.findViewById(R.id.seventh_day_name);
         dayOfWeekView.setText(dayOfWeek);
         dayOfMonthView = (TextView) calendarViewFragment.findViewById(R.id.seventh_day_date);
         dayOfMonthView.setText(dayOfMonth+"");
+        daysOfTheWeekRepo.add("Today");
 
 
         // Get the days for the past 7 days
@@ -451,7 +481,7 @@ public class CalendarViewFragment extends Fragment {
         // Set the right headline
     }
 
-    private String getDayOfWeek(int dayOfWeekValue) {
+    private String getDayOfWeekForCalendarView(int dayOfWeekValue) {
 
         String dayOfWeek = "";
 
@@ -481,4 +511,5 @@ public class CalendarViewFragment extends Fragment {
 
         return dayOfWeek;
     }
+
 }

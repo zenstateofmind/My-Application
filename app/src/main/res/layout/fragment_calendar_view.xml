@@ -15,6 +15,7 @@
         android:textSize="@dimen/activity_home_screen_title"
         android:gravity="center_vertical"
         android:paddingLeft="16dp"
+        android:id="@+id/calendar_day"
         android:text="Today"/>
 
     <LinearLayout

@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.amplitude.api.Amplitude;
 
@@ -203,8 +204,8 @@ public class AppUsageListFragment extends Fragment {
 
         Calendar notifWeekend = Calendar.getInstance();
         notifWeekend.setTimeInMillis(System.currentTimeMillis());
-        notifWeekend.set(Calendar.HOUR_OF_DAY, 13);
-        notifWeekend.set(Calendar.MINUTE, 00);
+        notifWeekend.set(Calendar.HOUR_OF_DAY, 10);
+        notifWeekend.set(Calendar.MINUTE, 42);
 
         AlarmManager alarmManager8 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent8 = new Intent(getContext(), WeeklyUsageReviewNotifReceiver.class);
@@ -212,7 +213,6 @@ public class AppUsageListFragment extends Fragment {
         PendingIntent alarmIntent8 = PendingIntent.getBroadcast(getContext(), id8, intent8, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager8.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekend.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, alarmIntent8);
-
 
     }
 
@@ -292,20 +292,15 @@ public class AppUsageListFragment extends Fragment {
             timeSpentPerApp = MakeMeZenUtil.getAppUsageInfoList(dataForTheDay, getContext());
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
-            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis() &&
-                    dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
+            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
 
-                new UpdateTodayDataUsageTask().execute(startTimeForData, endTimeForData);
-//                TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
-//                timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
-//
-//                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
-//                String key = MakeMeZenUtil.createKey(startTimeForData);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putString(key, appUsageInfoObjectsString);
-//                editor.apply();
-//
-//                setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
+                if (dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
+                    updateDataForNotifs(startTimeForData, timeSpentPerApp);
+                    new UpdateTodayDataUsageTask().execute(startTimeForData, endTimeForData);
+                } else {
+                    setCalendarViewForToday();
+                }
+
             }
         } else {
 
@@ -525,7 +520,7 @@ public class AppUsageListFragment extends Fragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void testUpdateData(Long startTime, Long endTime) {
+    public void updateData(Long startTime, Long endTime) {
         setupDataAndView(getView(), startTime, endTime);
     }
 
@@ -562,16 +557,9 @@ public class AppUsageListFragment extends Fragment {
             super.onPostExecute(appUsageInfos);
             if (getView() != null && getFragmentManager() != null && getResources() != null) {
 
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_orange));
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.first_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.second_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.third_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.fourth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.fifth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
-                getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.sixth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+                setCalendarViewForToday();
                 setUpTimeSpentRecycleView(getView(), appUsageInfos);
 
-                updateDataForNotifs(getTodayStartTimeCal().getTimeInMillis(), appUsageInfos);
 //                Drawable seventhDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
 //
 //                //TODO: HORRIBLE WAY OF WRITING CODE, PLEASE TRY TO FIND ANOTHER ALTERNATIVE HERE
@@ -585,5 +573,17 @@ public class AppUsageListFragment extends Fragment {
             }
 
         }
+    }
+
+    private void setCalendarViewForToday() {
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_orange));
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.first_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.second_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.third_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.fourth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.fifth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+        getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.sixth_day).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_shape));
+        TextView calendarDay = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.calendar_day);
+        calendarDay.setText("Today");
     }
 }
