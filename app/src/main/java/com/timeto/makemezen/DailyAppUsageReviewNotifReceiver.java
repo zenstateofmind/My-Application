@@ -149,6 +149,7 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
             }
         }
 
+
         ArrayList<AppUsageInfo> overusedApps = overusedApps(context, MakeMeZenUtil.APP_OVERUSE_MINUTES, appUsageInfos);
 
         if (overusedApps.size() > 0) {

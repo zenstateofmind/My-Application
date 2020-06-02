@@ -1,5 +1,6 @@
 package com.timeto.makemezen;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -88,6 +89,7 @@ public class AppUsageListFragment extends Fragment {
         Drawable currentDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
 
         setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
+
 //        }
 
 //        if (this.getArguments() == null) {
@@ -263,9 +265,6 @@ public class AppUsageListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-
-
     }
 
     // Get the data from the database
@@ -304,26 +303,29 @@ public class AppUsageListFragment extends Fragment {
             }
         } else {
 
-            TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
-            timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
+            new GetFreshDataTask().execute(startTimeForData, endTimeForData);
 
-            if (!timeSpentPerApp.isEmpty()) {
+//            TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
+//            timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
+//
+//            if (!timeSpentPerApp.isEmpty()) {
+//
+//                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
+//                String key = MakeMeZenUtil.createKey(startTimeForData);
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.putString(key, appUsageInfoObjectsString);
+//
+//                editor.putString(MakeMeZenUtil.lastUpdateKey(startTimeForData), System.currentTimeMillis() + "");
+//
+//                editor.commit();
+//            }
+//
+//            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+//                updateDataForNotifs(startTimeForData, timeSpentPerApp);
+//            }
+//
+//            setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
-                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
-                String key = MakeMeZenUtil.createKey(startTimeForData);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(key, appUsageInfoObjectsString);
-
-                editor.putString(MakeMeZenUtil.lastUpdateKey(startTimeForData), System.currentTimeMillis() + "");
-
-                editor.commit();
-            }
-
-            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
-                updateDataForNotifs(startTimeForData, timeSpentPerApp);
-            }
-
-            setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
         }
 
     }
@@ -522,6 +524,60 @@ public class AppUsageListFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void updateData(Long startTime, Long endTime) {
         setupDataAndView(getView(), startTime, endTime);
+    }
+
+    private class GetFreshDataTask extends AsyncTask<Long, Void, ArrayList<AppUsageInfo>> {
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected ArrayList<AppUsageInfo> doInBackground(Long... timings) {
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
+            TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
+            Long startTimeInMilli = timings[0];
+            Long endTimeInMilli = timings[1];
+
+            ArrayList<AppUsageInfo> appUsageInfos = timeSpentEngine.getTimeSpent(startTimeInMilli, endTimeInMilli);
+
+            if (!appUsageInfos.isEmpty()) {
+
+                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(appUsageInfos);
+                String key = MakeMeZenUtil.createKey(startTimeInMilli);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(key, appUsageInfoObjectsString);
+
+                editor.putString(MakeMeZenUtil.lastUpdateKey(startTimeInMilli), System.currentTimeMillis() + "");
+
+                editor.commit();
+            }
+
+            if (startTimeInMilli == getTodayStartTimeCal().getTimeInMillis()) {
+                updateDataForNotifs(startTimeInMilli, appUsageInfos);
+            }
+
+            return appUsageInfos;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            View appUsageListFragmentView = getFragmentManager().findFragmentById(R.id.app_usage_list_fragment).getView();
+            if (appUsageListFragmentView != null) {
+                appUsageListFragmentView.findViewById(R.id.progressbar).setVisibility(View.VISIBLE);
+            }
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        protected void onPostExecute(ArrayList<AppUsageInfo> appUsageInfos) {
+            super.onPostExecute(appUsageInfos);
+
+            View appUsageListFragmentView = getFragmentManager().findFragmentById(R.id.app_usage_list_fragment).getView();
+
+            if (appUsageListFragmentView != null) {
+                setUpTimeSpentRecycleView(appUsageListFragmentView, appUsageInfos);
+                appUsageListFragmentView.findViewById(R.id.progressbar).setVisibility(View.INVISIBLE);
+            }
+        }
     }
 
     private class UpdateTodayDataUsageTask extends AsyncTask<Long, Void, ArrayList<AppUsageInfo>> {

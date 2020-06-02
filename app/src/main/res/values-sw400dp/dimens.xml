@@ -16,7 +16,7 @@
 
     <!--  ///////////////////////// -->
     <!-- hero_single_app_usage_info.xml -->
-    <dimen name="hero_margin_top">30dp</dimen>
+    <dimen name="hero_margin_top">25dp</dimen>
     <dimen name="screen_time_margin">132dp</dimen>
     <dimen name="progress_bar_base">220dp</dimen>
     <dimen name="time_spent_text">24dp</dimen>

@@ -12,7 +12,9 @@
     <string name="be_more_mindful">Be more mindful</string>
     <string name="why_enable">We will remind you on a periodic basis of your phone usage patterns.</string>
     <string name="font_name">Make Me Zen</string>
+    <string name="positive_text">Be Mindful! Be Productive!</string>
     <string name="notify_example">"Yesterday, you were on your phone for 30 mins less than the day before! Great Job! "</string>
+    <string name="notify_example_2">"Time is the most valuable thing a person can spend. Spend your time on your phone wisely!"</string>
     <string name="enable_usage_access">ENABLE USAGE ACCESS</string>
     <string name="enable_notifications">CONTINUE</string>
     <string name="ill_do_it_later">I\'LL DO IT LATER</string>
