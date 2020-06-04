@@ -43,7 +43,7 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Amplitude.getInstance().logEvent("Notify the user");
+        Amplitude.getInstance().logEvent("Kickstart the daily app usage notifier");
 
         String notifText = "";
 
@@ -117,18 +117,23 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                 notifText = "You have spent more than " + hoursSpent + " hours on your phone today. Learn more!";
                 buildAndSendNotif(context, intent, notifText, notificationManager);
                 updatePhoneUsageDataInSharedPreferences(today.getTimeInMillis(), context, MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE);
-                Amplitude.getInstance().logEvent("Notification sent");
-                return;
+                Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE_TIME + " hour phone usage notification sent");
+            } else {
+                Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE_TIME + " hour phone usage notification sent. Previously sent");
             }
+            return;
         } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME &&
                 hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME) {
             if (!dailyNotifPhoneUsageSent(today.getTimeInMillis(), MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO, context)) {
                 notifText = "You have spent more than " + hoursSpent + " hours on your phone today. Learn more!";
                 buildAndSendNotif(context, intent, notifText, notificationManager);
                 updatePhoneUsageDataInSharedPreferences(today.getTimeInMillis(), context, MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO);
-                Amplitude.getInstance().logEvent("Notification sent");
-                return;
+                Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME + " hour phone usage notification sent");
+
+            } else {
+                Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME + " hour phone usage notification sent. Previously sent");
             }
+            return;
 
         } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME &&
                 hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME) {
@@ -136,17 +141,23 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                 notifText = "You have spent more than " + hoursSpent + " hours on your phone today. Learn more!";
                 buildAndSendNotif(context, intent, notifText, notificationManager);
                 updatePhoneUsageDataInSharedPreferences(today.getTimeInMillis(), context, MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE);
-                Amplitude.getInstance().logEvent("Notification sent");
-                return;
+                Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME + " hour phone usage notification sent");
+
+            } else {
+                Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME + " hour phone usage notification sent. Previously sent");
             }
+            return;
         } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME) {
             if (!dailyNotifPhoneUsageSent(today.getTimeInMillis(), MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR, context)) {
                 notifText = "You have spent more than " + hoursSpent + " hours on your phone today. Learn more!";
                 buildAndSendNotif(context, intent, notifText, notificationManager);
                 updatePhoneUsageDataInSharedPreferences(today.getTimeInMillis(), context, MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR);
-                Amplitude.getInstance().logEvent("Notification sent");
-                return;
+                Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME + " hour phone usage notification sent");
+
+            } else {
+                Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME + " hour phone usage notification sent. Previously sent");
             }
+            return;
         }
 
 
@@ -162,18 +173,24 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                         notifText = "You have spent more than " + hoursSpentOnApp + " hours on " + overUsedApp.getAppName() + " today. Learn more!";
                         buildAndSendNotif(context, intent, notifText, notificationManager);
                         updateAppUsageDataInSharedPreferences(today.getTimeInMillis(), overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_ONE, context);
-                        Amplitude.getInstance().logEvent("Notification sent");
-                        return;
+                        Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_ONE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
+
+                    } else {
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_ONE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
                     }
+                    return;
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME &&
                         hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME) {
                     if (!dailyNotifAppUsageSent(today.getTimeInMillis(), overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_TWO, context)) {
                         notifText = "You have spent more than " + hoursSpentOnApp + " hours on " + overUsedApp.getAppName() + " today. Learn more!";
                         buildAndSendNotif(context, intent, notifText, notificationManager);
                         updateAppUsageDataInSharedPreferences(today.getTimeInMillis(), overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_TWO, context);
-                        Amplitude.getInstance().logEvent("Notification sent");
-                        return;
+                        Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
+
+                    } else {
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
                     }
+                    return;
 
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME &&
                         hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME) {
@@ -181,18 +198,24 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                         notifText = "You have spent more than " + hoursSpentOnApp + " hours on " + overUsedApp.getAppName() + " today. Learn more!";
                         buildAndSendNotif(context, intent, notifText, notificationManager);
                         updateAppUsageDataInSharedPreferences(today.getTimeInMillis(), overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_THREE, context);
-                        Amplitude.getInstance().logEvent("Notification sent");
-                        return;
+                        Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
+
+                    } else {
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
                     }
+                    return;
 
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME) {
                     if (!dailyNotifAppUsageSent(today.getTimeInMillis(), overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR, context)) {
                         notifText = "You have spent more than " + hoursSpentOnApp + " hours on " + overUsedApp.getAppName() + " today. Learn more!";
                         buildAndSendNotif(context, intent, notifText, notificationManager);
                         updateAppUsageDataInSharedPreferences(today.getTimeInMillis(), overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR, context);
-                        Amplitude.getInstance().logEvent("Notification sent");
-                        return;
+                        Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
+
+                    } else {
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
                     }
+                    return;
                 }
 
             }

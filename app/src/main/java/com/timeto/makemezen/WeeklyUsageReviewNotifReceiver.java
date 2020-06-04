@@ -15,6 +15,8 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.amplitude.api.Amplitude;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +32,7 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
+        Amplitude.getInstance().logEvent("Kickstart the Weekly Usage Notification");
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -100,6 +103,9 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
                 updateWeeklyUsageNotifInfo(context);
             }
 
+            Amplitude.getInstance().logEvent("Sent the Weekly Usage Notification");
+        } else {
+            Amplitude.getInstance().logEvent("Did not send the Weekly Usage Notification");
         }
 
     }

@@ -287,11 +287,15 @@ public class AppUsageListFragment extends Fragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
 
         if (dataStored(startTimeForData)) {
+
+            Amplitude.getInstance().logEvent("Pulling existing data for " + getDateFromMilliSeconds(startTimeForData));
             String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createKey(startTimeForData), "");
             timeSpentPerApp = MakeMeZenUtil.getAppUsageInfoList(dataForTheDay, getContext());
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
             if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+
+                Amplitude.getInstance().logEvent("Updating today's data for " + getDateFromMilliSeconds(startTimeForData));
 
                 if (dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
                     updateDataForNotifs(startTimeForData, timeSpentPerApp);
@@ -299,11 +303,15 @@ public class AppUsageListFragment extends Fragment {
                 } else {
                     setCalendarViewForToday();
                 }
-
             }
+            Amplitude.getInstance().logEvent("Updating today's data for " + getDateFromMilliSeconds(startTimeForData));
         } else {
 
+            Amplitude.getInstance().logEvent("Getting fresh data for " + getDateFromMilliSeconds(startTimeForData));
+
             new GetFreshDataTask().execute(startTimeForData, endTimeForData);
+
+            Amplitude.getInstance().logEvent("Got fresh data for " + getDateFromMilliSeconds(startTimeForData));
 
 //            TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
 //            timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
@@ -419,6 +427,17 @@ public class AppUsageListFragment extends Fragment {
             }
         }
         return overusedApps;
+    }
+
+    private String getDateFromMilliSeconds(Long milliSeconds) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+
+        int mYear = calendar.get(Calendar.YEAR);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+        return mMonth + "/" + mDay + "/" + mYear;
     }
 
     private void updateAppUsageDataInSharedPreferences(long timeInMillis, String appName, String milestone) {

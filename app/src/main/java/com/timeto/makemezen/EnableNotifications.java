@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.amplitude.api.Amplitude;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,6 +47,7 @@ public class EnableNotifications extends Fragment {
         View.OnClickListener buttonListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Amplitude.getInstance().logEvent("Starting Home Screen From Notifications Education Screen");
                 Intent intent = new Intent(getActivity(), HomeScreen.class);
                 startActivity(intent);
             }

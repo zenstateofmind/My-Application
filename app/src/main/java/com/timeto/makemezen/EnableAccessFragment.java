@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.amplitude.api.Amplitude;
+
 import java.util.Calendar;
 
 
@@ -92,13 +94,17 @@ public class EnableAccessFragment extends Fragment {
     private void goToNextScreen() {
         Log.i(TAG, "Yay! Seems like we got the access needed! Ideally we will jump to the next initiative " +
                 "from here");
+        Amplitude.getInstance().logEvent("Access to usage data received");
         if (goToNotifEducation) {
 //            kickStartAlarmManager();
+
+            Amplitude.getInstance().logEvent("Going to notification education screen");
             Intent intent = new Intent(getActivity(), NotificationEducation.class);
             startActivity(intent);
 //                        getActivity().finish();
         } else {
             goToNotifEducation = false;
+            Amplitude.getInstance().logEvent("Going to the actual home screen");
             Intent intent = new Intent(getActivity(), HomeScreen.class);
             startActivity(intent);
 //                        getActivity().finish();

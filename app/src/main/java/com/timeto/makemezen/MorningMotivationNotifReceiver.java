@@ -32,7 +32,7 @@ public class MorningMotivationNotifReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onReceive(Context context, Intent intent) {
-        Amplitude.getInstance().logEvent("Notify the user");
+        Amplitude.getInstance().logEvent("Kickstart Morning Motivation Notification");
 
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -124,6 +124,9 @@ public class MorningMotivationNotifReceiver extends BroadcastReceiver {
 
             buildAndSendNotif(context, intent, notifText, notificationManager);
             updateMorningMotivationData(context, todayInMilli);
+            Amplitude.getInstance().logEvent("Morning Motivation notification sent!");
+        } else {
+            Amplitude.getInstance().logEvent("Not sending. Morning Motivation already sent");
         }
 
     }

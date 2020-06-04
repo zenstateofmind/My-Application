@@ -14,6 +14,6 @@ public class NotificationEducation extends AppCompatActivity {
         setContentView(R.layout.activity_notification_education);
         Amplitude.getInstance().initialize(this, "c2f55b5584feb1ea777a22019b80d190").enableForegroundTracking(getApplication());
 
-        Amplitude.getInstance().logEvent("Notification education");
+        Amplitude.getInstance().logEvent("Kickstarting Notification education");
     }
 }

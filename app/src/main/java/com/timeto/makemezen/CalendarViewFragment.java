@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amplitude.api.Amplitude;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -78,6 +80,7 @@ public class CalendarViewFragment extends Fragment {
                 dayOfTheWeekView.setText(daysOfTheWeekRepo.get(0));
 
                 if (firstDayCurrBackground != firstDayOriginalBackground) {
+                    Amplitude.getInstance().logEvent("Starting update for 6 days ago usage data");
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -6);
                     startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -94,6 +97,8 @@ public class CalendarViewFragment extends Fragment {
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+
+                    Amplitude.getInstance().logEvent("Completed update for 6 days ago usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -126,6 +131,7 @@ public class CalendarViewFragment extends Fragment {
                 dayOfTheWeekView.setText(daysOfTheWeekRepo.get(1));
 
                 if (secondDayOriginalBackground != secondDayCurrBackground) {
+                    Amplitude.getInstance().logEvent("Starting update for 5 days ago usage data");
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -5);
                     startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -142,6 +148,7 @@ public class CalendarViewFragment extends Fragment {
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    Amplitude.getInstance().logEvent("Completed update for 5 days ago usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -173,6 +180,7 @@ public class CalendarViewFragment extends Fragment {
                 dayOfTheWeekView.setText(daysOfTheWeekRepo.get(2));
 
                 if (thirdDayOriginalBackground != thirdDayCurrBackground) {
+                    Amplitude.getInstance().logEvent("Starting update for 4 days ago usage data");
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -4);
                     startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -189,6 +197,8 @@ public class CalendarViewFragment extends Fragment {
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+
+                    Amplitude.getInstance().logEvent("Completed update for 4 days ago usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -207,6 +217,7 @@ public class CalendarViewFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
+                Amplitude.getInstance().logEvent("Starting update for 3 days ago usage data");
                 Drawable fourthDayOriginalBackground = fourthDayLayout.getBackground();
                 fourthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_orange));
                 Drawable fourthDayCurrBackground = fourthDayLayout.getBackground();
@@ -236,6 +247,7 @@ public class CalendarViewFragment extends Fragment {
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+                    Amplitude.getInstance().logEvent("Completed update for 3 days ago usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -267,6 +279,7 @@ public class CalendarViewFragment extends Fragment {
                 dayOfTheWeekView.setText(daysOfTheWeekRepo.get(4));
 
                 if (fifthDayOriginalBackground != fifthDayCurrBackground) {
+                    Amplitude.getInstance().logEvent("Starting update for 2 days ago usage data");
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, -2);
                     startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -283,6 +296,8 @@ public class CalendarViewFragment extends Fragment {
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+
+                    Amplitude.getInstance().logEvent("Completed update for 2 days ago usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -301,6 +316,7 @@ public class CalendarViewFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
+                Amplitude.getInstance().logEvent("Starting update for 1 days ago usage data");
                 Drawable sixthDayOriginalBackground = sixthDayLayout.getBackground();
                 sixthDayLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.calendar_curved_orange));
                 Drawable sixthDayCurrBackground = sixthDayLayout.getBackground();
@@ -330,6 +346,8 @@ public class CalendarViewFragment extends Fragment {
 
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), endTime.getTimeInMillis());
+
+                    Amplitude.getInstance().logEvent("Completed update for 1 days ago usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
@@ -361,6 +379,7 @@ public class CalendarViewFragment extends Fragment {
                 dayOfTheWeekView.setText(daysOfTheWeekRepo.get(6));
 
                 if (seventhDayCurrBackground != seventhDayOriginalBackground) {
+                    Amplitude.getInstance().logEvent("Starting update for today's usage data");
                     Calendar startTime = Calendar.getInstance();
                     startTime.add(Calendar.DAY_OF_YEAR, 0);
                     startTime.set(Calendar.HOUR_OF_DAY, 0);
@@ -371,6 +390,7 @@ public class CalendarViewFragment extends Fragment {
                     AppUsageListFragment appUsageFragment = (AppUsageListFragment) getFragmentManager().findFragmentById(R.id.app_usage_list_fragment);
                     appUsageFragment.updateData(startTime.getTimeInMillis(), System.currentTimeMillis());
 
+                    Amplitude.getInstance().logEvent("Completed update for today's usage data");
 
 //                    Bundle bundle = new Bundle();
 //                    bundle.putLong(MakeMeZenUtil.START_DATE_MILLISECONDS, startTime.getTimeInMillis());
