@@ -58,7 +58,7 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createAndSendNotif(Context context, Intent intent, NotificationManager notificationManager) {
 
-        if (todayIsSunday() && !weeklyUsageNotifSent(context)) {
+        if (todayIsSunday() && currentHourBetween(9, 12) && !weeklyUsageNotifSent(context)) {
 
             Long weeklyTimeSpentInMilli = 0L;
             for (int startDay = -6; startDay < 1; startDay++) {
@@ -169,5 +169,11 @@ public class WeeklyUsageReviewNotifReceiver extends BroadcastReceiver {
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);
         return c.getTimeInMillis();
+    }
+
+    private boolean currentHourBetween(int startTime, int endTime) {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        return hour >= startTime && hour <= endTime;
     }
 }

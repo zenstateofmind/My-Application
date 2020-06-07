@@ -36,8 +36,12 @@ public class MakeMeZenUtil {
     public static final int MILESTONE_APP_USAGE_THREE_TIME = 6;
     public static final int MILESTONE_APP_USAGE_FOUR_TIME = 8;
 
+    public static final long TWO_HOUR_INTERVAL = 7200000L;
+
+    public static final long ONE_AND_A_HALF_HOUR_INTERVAL = 5400000L;
+
     private static final String DAILY_NOTIF_PHONE_USAGE_KEY = "daily_notification_phone_usage";
-    private static final String DAILY_NOTIF_APP_USAGE_KEY = "daily_notification_phone_usage";
+    private static final String DAILY_NOTIF_APP_USAGE_KEY = "daily_notification_app_usage";
     private static final String WEEKLY_NOTIF_USAGE_KEY = "weekly_notif_usage";
     public static final String DIVIDER = "&&&";
     private static final String APP_USAGE_INFO_OBJECTS_DIVIDER = "@@@@@@@#@@@@@@@@@@@@";

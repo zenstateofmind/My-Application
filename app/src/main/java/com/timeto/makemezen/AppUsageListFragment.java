@@ -19,7 +19,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +56,7 @@ public class AppUsageListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        kickStartAlarmManager();
+
     }
 
     @Override
@@ -117,104 +119,34 @@ public class AppUsageListFragment extends Fragment {
      */
     private void kickStartAlarmManager() {
 
-        // Set the alarm to start at approximately 2:00 p.m.
-        Calendar notifWeekday1 = Calendar.getInstance();
-        notifWeekday1.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday1.set(Calendar.HOUR_OF_DAY, 9);
-        notifWeekday1.set(Calendar.MINUTE, 00);
 
-        AlarmManager alarmManager1 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent1 = new Intent(getContext(), MorningMotivationNotifReceiver.class);
+        AlarmManager morningMotivationAlarm = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent morningMotivationIntent = new Intent(getContext(), MorningMotivationNotifReceiver.class);
         int id1 = (int)System.currentTimeMillis() + 9;
-        PendingIntent alarmIntent1 = PendingIntent.getBroadcast(getContext(), id1 , intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent morningMotivationPendingIntent = PendingIntent.getBroadcast(getContext(), id1 , morningMotivationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        alarmManager1.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday1.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent1);
+        morningMotivationAlarm.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
+                MakeMeZenUtil.TWO_HOUR_INTERVAL, morningMotivationPendingIntent);
 
-        Calendar notifWeekday2 = Calendar.getInstance();
-        notifWeekday2.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday2.set(Calendar.HOUR_OF_DAY, 11);
-        notifWeekday2.set(Calendar.MINUTE, 00);
 
-        AlarmManager alarmManager2 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent2 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
+        AlarmManager dailyUsageAlarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent dailyUsageIntent = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
         int id2 = (int)System.currentTimeMillis() + 11;
-        PendingIntent alarmIntent2 = PendingIntent.getBroadcast(getContext(), id2, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager2.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday2.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent2);
+        PendingIntent dailyUsagePendingIntent = PendingIntent.getBroadcast(getContext(), 0, dailyUsageIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Calendar notifWeekday3 = Calendar.getInstance();
-        notifWeekday3.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday3.set(Calendar.HOUR_OF_DAY, 13);
-        notifWeekday3.set(Calendar.MINUTE, 00);
 
-        AlarmManager alarmManager3 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent3 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
-        int id3 = (int)System.currentTimeMillis() + 13;
-        PendingIntent alarmIntent3 = PendingIntent.getBroadcast(getContext(), id3, intent3, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager3.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday3.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent3);
+        dailyUsageAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime(),
+                MakeMeZenUtil.ONE_AND_A_HALF_HOUR_INTERVAL,
+                dailyUsagePendingIntent);
 
-        Calendar notifWeekday4 = Calendar.getInstance();
-        notifWeekday4.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday4.set(Calendar.HOUR_OF_DAY, 15);
-        notifWeekday4.set(Calendar.MINUTE, 00);
 
-        AlarmManager alarmManager4 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent4 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
-        int id4 = (int)System.currentTimeMillis() + 15;
-        PendingIntent alarmIntent4 = PendingIntent.getBroadcast(getContext(), id4, intent4, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager4.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday4.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent4);
-
-        Calendar notifWeekday5 = Calendar.getInstance();
-        notifWeekday5.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday5.set(Calendar.HOUR_OF_DAY, 17);
-        notifWeekday5.set(Calendar.MINUTE, 00);
-
-        AlarmManager alarmManager5 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent5 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
-        int id5 = (int)System.currentTimeMillis() + 17;
-        PendingIntent alarmIntent5 = PendingIntent.getBroadcast(getContext(), id5, intent5, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager5.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday5.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent5);
-//        alarmManager5.set
-
-        Calendar notifWeekday6 = Calendar.getInstance();
-        notifWeekday6.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday6.set(Calendar.HOUR_OF_DAY, 19);
-        notifWeekday6.set(Calendar.MINUTE, 00);
-
-        AlarmManager alarmManager6 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent6 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
-        int id6 = (int)System.currentTimeMillis() + 19;
-        PendingIntent alarmIntent6 = PendingIntent.getBroadcast(getContext(), id6, intent6, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager6.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday6.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent6);
-
-        Calendar notifWeekday7 = Calendar.getInstance();
-        notifWeekday7.setTimeInMillis(System.currentTimeMillis());
-        notifWeekday7.set(Calendar.HOUR_OF_DAY, 21);
-        notifWeekday7.set(Calendar.MINUTE, 00);
-
-        AlarmManager alarmManager7 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent7 = new Intent(getContext(), DailyAppUsageReviewNotifReceiver.class);
-        int id7 = (int)System.currentTimeMillis() + 21;
-        PendingIntent alarmIntent7 = PendingIntent.getBroadcast(getContext(), id7, intent7, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager7.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekday7.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent7);
-
-        Calendar notifWeekend = Calendar.getInstance();
-        notifWeekend.setTimeInMillis(System.currentTimeMillis());
-        notifWeekend.set(Calendar.HOUR_OF_DAY, 10);
-        notifWeekend.set(Calendar.MINUTE, 42);
-
-        AlarmManager alarmManager8 = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent8 = new Intent(getContext(), WeeklyUsageReviewNotifReceiver.class);
+        AlarmManager weeklyUsageAlarmManager = (AlarmManager)getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent weeklyUsageAlarmIntent = new Intent(getContext(), WeeklyUsageReviewNotifReceiver.class);
         int id8 = (int)System.currentTimeMillis() + 1231;
-        PendingIntent alarmIntent8 = PendingIntent.getBroadcast(getContext(), id8, intent8, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager8.setInexactRepeating(AlarmManager.RTC_WAKEUP, notifWeekend.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY, alarmIntent8);
+        PendingIntent weeklyUsagePendingIntent = PendingIntent.getBroadcast(getContext(), 0, weeklyUsageAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        weeklyUsageAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(),
+                MakeMeZenUtil.TWO_HOUR_INTERVAL, weeklyUsagePendingIntent);
 
     }
 
@@ -302,6 +234,7 @@ public class AppUsageListFragment extends Fragment {
                     new UpdateTodayDataUsageTask().execute(startTimeForData, endTimeForData);
                 } else {
                     setCalendarViewForToday();
+                    kickStartAlarmManager();
                 }
             }
             Amplitude.getInstance().logEvent("Updating today's data for " + getDateFromMilliSeconds(startTimeForData));
@@ -335,6 +268,7 @@ public class AppUsageListFragment extends Fragment {
 //            setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
         }
+
 
     }
 
@@ -595,7 +529,9 @@ public class AppUsageListFragment extends Fragment {
             if (appUsageListFragmentView != null) {
                 setUpTimeSpentRecycleView(appUsageListFragmentView, appUsageInfos);
                 appUsageListFragmentView.findViewById(R.id.progressbar).setVisibility(View.INVISIBLE);
+                kickStartAlarmManager();
             }
+
         }
     }
 
@@ -634,6 +570,7 @@ public class AppUsageListFragment extends Fragment {
 
                 setCalendarViewForToday();
                 setUpTimeSpentRecycleView(getView(), appUsageInfos);
+                kickStartAlarmManager();
 
 //                Drawable seventhDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
 //

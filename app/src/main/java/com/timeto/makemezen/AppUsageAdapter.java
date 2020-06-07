@@ -107,7 +107,13 @@ public class AppUsageAdapter extends RecyclerView.Adapter {
             ((HeroAppUsageViewHolder)holder).appIconView.setImageDrawable(appUsageInfo.getAppIcon());
             int hours = totalTimeSpent/60;
             int mins = totalTimeSpent%60;
-            ((HeroAppUsageViewHolder)holder).totalTimeSpent.setText(hours+"h " + mins + "m");
+
+            if (hours == 0 ) {
+                ((HeroAppUsageViewHolder)holder).totalTimeSpent.setText(mins + "m");
+            } else {
+                ((HeroAppUsageViewHolder)holder).totalTimeSpent.setText(hours+"h " + mins + "m");
+            }
+
 
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((HeroAppUsageViewHolder)holder).usageBar.getLayoutParams();
             Log.i(TAG, "App Name: " + appUsageInfo.getAppName() + " Param width: " + params.width);

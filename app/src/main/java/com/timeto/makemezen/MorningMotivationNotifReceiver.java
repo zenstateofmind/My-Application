@@ -88,7 +88,8 @@ public class MorningMotivationNotifReceiver extends BroadcastReceiver {
         Log.i(LOG, "Going to start building the notification!");
 
         long todayInMilli = getCalendar(0).getTimeInMillis();
-        if (!motivationNotifSent(context, todayInMilli)) {
+
+        if (!motivationNotifSent(context, todayInMilli) && currentHourBetween(8, 10)) {
 
             Calendar dayBeforeStartTime = getCalendar(-2);
             Calendar dayBeforeEndTime = getCalendar(-1);
@@ -101,25 +102,37 @@ public class MorningMotivationNotifReceiver extends BroadcastReceiver {
             ArrayList<AppUsageInfo> dayBeforeAppUsageData = engine.getTimeSpent(dayBeforeStartTime.getTimeInMillis(), dayBeforeEndTime.getTimeInMillis());
             ArrayList<AppUsageInfo> yesterdayAppUsageData = engine.getTimeSpent(yesterdayStartTime.getTimeInMillis(), yesterdayEndTime.getTimeInMillis());
 
-            int dayBeforeTotalTimeSpent = 0;
-            int yesterdayTotalTimeSpent = 0;
+            long dayBeforeTotalTimeSpent = 0;
+            long yesterdayTotalTimeSpent = 0;
 
             for (AppUsageInfo appUsageInfo : dayBeforeAppUsageData) {
                 dayBeforeTotalTimeSpent += appUsageInfo.getTimeSpentInMilliseconds();
             }
 
+            dayBeforeTotalTimeSpent = TimeUnit.MILLISECONDS.toMinutes(dayBeforeTotalTimeSpent);
+
             for (AppUsageInfo appUsageInfo : yesterdayAppUsageData) {
                 yesterdayTotalTimeSpent += appUsageInfo.getTimeSpentInMilliseconds();
             }
 
+            yesterdayTotalTimeSpent = TimeUnit.MILLISECONDS.toMinutes(yesterdayTotalTimeSpent);
+
             Log.i(LOG, "Time spent on the app day before: " + TimeUnit.MILLISECONDS.toHours(dayBeforeTotalTimeSpent));
             Log.i(LOG, "Time spent on the app yesterday: " + TimeUnit.MILLISECONDS.toHours(yesterdayTotalTimeSpent));
 
-            if (yesterdayTotalTimeSpent < dayBeforeTotalTimeSpent) {
-                notifText = "Good Job! Fantastic! You spent less time on your phone yesterday than the day before!";
+            int hoursSpentYest = (int) yesterdayTotalTimeSpent/60;
+            int minsSpentYest = (int) yesterdayTotalTimeSpent % 60;
+
+            if (hoursSpentYest > 0) {
+                notifText = "You spent " + hoursSpentYest + " hours " + minsSpentYest + " mins on your phone yesterday. ";
             } else {
-                notifText = getMotivationalQuote();
-                Log.i(LOG, "The motivational quote is: " + notifText);
+                notifText = "You spent " + minsSpentYest + " mins on your phone yesterday. ";
+            }
+
+            if (yesterdayTotalTimeSpent < dayBeforeTotalTimeSpent) {
+                notifText = notifText + "You spent less time on your phone yesterday than the day before! Good Job! Tap to learn more.";
+            } else {
+                notifText = notifText + "Tap to learn more.";
             }
 
             buildAndSendNotif(context, intent, notifText, notificationManager);
@@ -176,8 +189,6 @@ public class MorningMotivationNotifReceiver extends BroadcastReceiver {
         return false;
     }
 
-
-
     private Calendar getCalendar(int amount) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, amount);
@@ -190,6 +201,12 @@ public class MorningMotivationNotifReceiver extends BroadcastReceiver {
 
     public static int getID() {
         return atomic_int_counter.incrementAndGet();
+    }
+
+    private boolean currentHourBetween(int startTime, int endTime) {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        return hour >= startTime && hour <= endTime;
     }
 
 }
