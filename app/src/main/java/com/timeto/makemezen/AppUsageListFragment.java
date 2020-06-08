@@ -76,7 +76,6 @@ public class AppUsageListFragment extends Fragment {
 
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.red));
         }
-//        testNotify();
     }
 
 
@@ -92,19 +91,6 @@ public class AppUsageListFragment extends Fragment {
 
         setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
 
-//        }
-
-//        if (this.getArguments() == null) {
-//            if (lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
-//                setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-//            }
-//        } else {
-//            Long startTimeForData = this.getArguments().getLong(MakeMeZenUtil.START_DATE_MILLISECONDS);
-//
-//            if (startTimeForData == c.getTimeInMillis() && lastUpdateTimeForTodaysDataGreaterThan(System.currentTimeMillis(), DELTA_UPDATE)) {
-//                setupDataAndView(getView(), c.getTimeInMillis(), System.currentTimeMillis());
-//            }
-//        }
 
     }
 
@@ -157,24 +143,7 @@ public class AppUsageListFragment extends Fragment {
         // Inflate the layout for this fragment
         View appUsageListFragmentView = inflater.inflate(R.layout.fragment_app_usage_list, container, false);
 
-        Long startTimeForData = 0L;
-        Long endTimeForData = 0L;
-
-//        if (this.getArguments() != null) {
-//            startTimeForData = this.getArguments().getLong(MakeMeZenUtil.START_DATE_MILLISECONDS);
-//            endTimeForData = this.getArguments().getLong(MakeMeZenUtil.END_DATE_MILLISECONDS);
-//
-//        } else {
-//            Calendar c = getTodayStartTimeCal();
-//
-//            startTimeForData = c.getTimeInMillis();
-//            endTimeForData = System.currentTimeMillis();
-//        }
-
         Calendar c = getTodayStartTimeCal();
-
-        startTimeForData = c.getTimeInMillis();
-        endTimeForData = System.currentTimeMillis();
 
         if (dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
             setupDataAndView(appUsageListFragmentView, c.getTimeInMillis(), System.currentTimeMillis());
@@ -216,60 +185,44 @@ public class AppUsageListFragment extends Fragment {
 
         ArrayList<AppUsageInfo> timeSpentPerApp = new ArrayList<>();
 
+        if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
+            updateDataForNotifs(startTimeForData, timeSpentPerApp);
+        }
+
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.file_key), Context.MODE_PRIVATE);
 
         if (dataStored(startTimeForData)) {
 
-            Amplitude.getInstance().logEvent("Pulling existing data for " + getDateFromMilliSeconds(startTimeForData));
+            Amplitude.getInstance().logEvent("Pulling existing data.");
             String dataForTheDay = sharedPreferences.getString(MakeMeZenUtil.createKey(startTimeForData), "");
             timeSpentPerApp = MakeMeZenUtil.getAppUsageInfoList(dataForTheDay, getContext());
             setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
 
             if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
 
-                Amplitude.getInstance().logEvent("Updating today's data for " + getDateFromMilliSeconds(startTimeForData));
+                Amplitude.getInstance().logEvent("Updating today's data.");
 
                 if (dataUpdatedNeeded(System.currentTimeMillis(), DELTA_UPDATE)) {
-                    updateDataForNotifs(startTimeForData, timeSpentPerApp);
+
                     new UpdateTodayDataUsageTask().execute(startTimeForData, endTimeForData);
                 } else {
                     setCalendarViewForToday();
+                    updateDataForNotifs(startTimeForData, timeSpentPerApp);
                     kickStartAlarmManager();
                 }
             }
-            Amplitude.getInstance().logEvent("Updating today's data for " + getDateFromMilliSeconds(startTimeForData));
+            Amplitude.getInstance().logEvent("Updating today's data.");
         } else {
 
-            Amplitude.getInstance().logEvent("Getting fresh data for " + getDateFromMilliSeconds(startTimeForData));
+            Amplitude.getInstance().logEvent("Getting fresh data for today.");
 
             new GetFreshDataTask().execute(startTimeForData, endTimeForData);
 
-            Amplitude.getInstance().logEvent("Got fresh data for " + getDateFromMilliSeconds(startTimeForData));
-
-//            TimeSpentEngine timeSpentEngine = new TimeSpentEngine(getContext());
-//            timeSpentPerApp = timeSpentEngine.getTimeSpent(startTimeForData, endTimeForData);
-//
-//            if (!timeSpentPerApp.isEmpty()) {
-//
-//                String appUsageInfoObjectsString = MakeMeZenUtil.getAppUsageInfoObjectsString(timeSpentPerApp);
-//                String key = MakeMeZenUtil.createKey(startTimeForData);
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.putString(key, appUsageInfoObjectsString);
-//
-//                editor.putString(MakeMeZenUtil.lastUpdateKey(startTimeForData), System.currentTimeMillis() + "");
-//
-//                editor.commit();
-//            }
-//
-//            if (startTimeForData == getTodayStartTimeCal().getTimeInMillis()) {
-//                updateDataForNotifs(startTimeForData, timeSpentPerApp);
-//            }
-//
-//            setUpTimeSpentRecycleView(appUsageListFragmentView, timeSpentPerApp);
+            Amplitude.getInstance().logEvent("Got fresh data for today.");
 
         }
 
-
+        kickStartAlarmManager();
     }
 
     // 1 - check if time spent is greater than a milestone:
@@ -290,25 +243,21 @@ public class AppUsageListFragment extends Fragment {
                 hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME) {
             if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE)) {
                 updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_ONE);
-                return;
             }
         } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO_TIME &&
                 hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME) {
             if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO )) {
                 updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_TWO);
-                return;
             }
 
         } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE_TIME &&
                 hoursSpent < MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME) {
             if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE)) {
                 updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_THREE);
-                return;
             }
         } else if (hoursSpent >= MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR_TIME) {
             if (!dailyNotifPhoneUsageSent(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR)) {
                 updatePhoneUsageDataInSharedPreferences(startDateInMilli, MakeMeZenUtil.MILESTONE_PHONE_USAGE_FOUR);
-                return;
             }
         }
 
@@ -322,26 +271,22 @@ public class AppUsageListFragment extends Fragment {
                         hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME) {
                     if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_ONE)) {
                         updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_ONE);
-                        return;
                     }
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME &&
                         hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME) {
                     if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_TWO)) {
                         updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_TWO);
-                        return;
                     }
 
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME &&
                         hoursSpentOnApp < MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME) {
                     if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_THREE)) {
                         updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_THREE);
-                        return;
                     }
 
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME) {
                     if (!dailyNotifAppUsageSent(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR)) {
                         updateAppUsageDataInSharedPreferences(startDateInMilli, overUsedApp.getAppName(), MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR);
-                        return;
                     }
                 }
 
@@ -424,7 +369,6 @@ public class AppUsageListFragment extends Fragment {
         int pxWidth = (int)(displayMetrics.widthPixels * .5);
         float dpWidth = (float)((displayMetrics.widthPixels) / displayMetrics.density * .51);
 
-
         adapter = new AppUsageAdapter(timeSpentPerApp, getResources(), (int)pxWidth);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
@@ -502,11 +446,8 @@ public class AppUsageListFragment extends Fragment {
 
                 editor.commit();
             }
-
-            if (startTimeInMilli == getTodayStartTimeCal().getTimeInMillis()) {
-                updateDataForNotifs(startTimeInMilli, appUsageInfos);
-            }
-
+            updateDataForNotifs(startTimeInMilli, appUsageInfos);
+            kickStartAlarmManager();
             return appUsageInfos;
         }
 
@@ -529,7 +470,6 @@ public class AppUsageListFragment extends Fragment {
             if (appUsageListFragmentView != null) {
                 setUpTimeSpentRecycleView(appUsageListFragmentView, appUsageInfos);
                 appUsageListFragmentView.findViewById(R.id.progressbar).setVisibility(View.INVISIBLE);
-                kickStartAlarmManager();
             }
 
         }
@@ -559,6 +499,9 @@ public class AppUsageListFragment extends Fragment {
 
             editor.apply();
 
+            updateDataForNotifs(startTimeForData, timeSpentPerApp);
+            kickStartAlarmManager();
+
             return timeSpentPerApp;
         }
 
@@ -570,7 +513,6 @@ public class AppUsageListFragment extends Fragment {
 
                 setCalendarViewForToday();
                 setUpTimeSpentRecycleView(getView(), appUsageInfos);
-                kickStartAlarmManager();
 
 //                Drawable seventhDayBackground = getFragmentManager().findFragmentById(R.id.calendar_view_fragment_container).getView().findViewById(R.id.seventh_day).getBackground();
 //

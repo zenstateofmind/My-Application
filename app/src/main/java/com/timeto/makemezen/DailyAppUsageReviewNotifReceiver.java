@@ -183,7 +183,7 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                         Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_ONE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
                         return;
                     } else {
-                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_ONE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_ONE_TIME + " hour app usage notification. Previously sent");
                     }
 
                 } else if (hoursSpentOnApp >= MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME &&
@@ -195,7 +195,7 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                         Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
                         return;
                     } else {
-                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_TWO_TIME + " hour app usage notification. Previously sent");
                     }
 
 
@@ -208,7 +208,7 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                         Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
                         return;
                     } else {
-                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_THREE_TIME + " hour app usage notification. Previously sent");
                     }
 
 
@@ -220,7 +220,7 @@ public class DailyAppUsageReviewNotifReceiver extends BroadcastReceiver {
                         Amplitude.getInstance().logEvent(MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME + " hour app usage notification sent for " + overUsedApp.getAppName());
                         return;
                     } else {
-                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME + " hour app usage notification sent for " + overUsedApp.getAppName() +". Previously sent");
+                        Amplitude.getInstance().logEvent("Not sending " + MakeMeZenUtil.MILESTONE_APP_USAGE_FOUR_TIME + " hour app usage notification. Previously sent");
                     }
 
                 }
